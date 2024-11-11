@@ -39,9 +39,7 @@ export const Container = styled.div`
 
 export const WrapperForm = styled.div`
     background-color: ${theme.grayscale.bgLightGrey};
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-
+    border-radius: 20px;
 
     h2{
         text-align: center;
@@ -60,7 +58,7 @@ export const ContainerButton = styled.div`
         display: none;
     }
 
-    button > div.show{
+    button.show > div{
         display: block;
     }
 `;
