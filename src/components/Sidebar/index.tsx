@@ -8,6 +8,7 @@ import Typography from "../Typography"
 import Button from "../Button"
 import { useNavigate } from "react-router-dom"
 import {CloseBtn,MenuImg,Overlay,SidebarContainer,SidebarContent } from './style'
+import { loggout } from '../../config/auth'
 
 export default function Sidebar() {
     const [isVisible, setIsVisible] = useState(false)
@@ -44,6 +45,7 @@ export default function Sidebar() {
                     <Button variant="text" size="large" icon={dashIcon} onClick={gotoDashboardPage}><Typography variant="body-M-regular">Dashboard</Typography></Button>
                     <Button variant="text" size="large" icon={colabIcon} onClick={gotoCollabPage}><Typography variant="body-M-regular">Colaboradores</Typography></Button>
                     <Button variant="text" size="large" icon={careerIcon} onClick={gotoCareerPage}><Typography variant="body-M-regular">Cargos</Typography></Button>
+                    <Button variant="text" size="large"  onClick={loggout}><Typography variant="body-M-regular">Logout</Typography></Button>
                 </SidebarContent>
             </SidebarContainer>
             <Overlay $isVisible={isVisible} onClick={closeSideBar}></Overlay>

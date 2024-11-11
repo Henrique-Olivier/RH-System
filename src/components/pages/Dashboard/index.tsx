@@ -4,6 +4,7 @@ import { BodyContainer, CardContainer, Select } from "./styles";
 import { PieChart, Pie, Sector, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, Rectangle } from 'recharts';
 import { carrers, collaborator, payload, propsGraph, selectType } from "./types";
 import { theme } from "../../colors/colorts";
+import Sidebar from "../../Sidebar";
 
 let textTooltip: string;
 
@@ -344,6 +345,7 @@ export default function Dashboard() {
 
   return(
       <BodyContainer>
+        <Sidebar></Sidebar>
           <CardContainer>
               <Typography variant="H4">Bem vindo</Typography>
           </CardContainer>

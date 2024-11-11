@@ -119,7 +119,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </Styles.InputBox>
-          <Typography variant="body-XS">Ainda não tem cadastro? <Link to="/signUp">pCadastre-se aqui</Link></Typography>
+          <Typography variant="body-XS">Ainda não tem cadastro? <Link to="/signUp">Cadastre-se aqui</Link></Typography>
           <Button size="large" variant="main" onClick={login}>
             <Typography variant="body-M-regular">Entrar</Typography>
           </Button>

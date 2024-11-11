@@ -9,6 +9,7 @@ import loading from "../../assets/spinner.svg";
 import Notification from "../../notfication";
 import { NotificationType } from "../../notfication/types";
 import { verifyIfIsLogged } from "../../../config/auth";
+import Sidebar from "../../Sidebar";
 
 function convertNumberToReal(value: number) {
     const valueFormatted = new Intl.NumberFormat('pt-BR', {
@@ -330,6 +331,7 @@ export default function Carrer() {
 
     return(
         <>
+        <Sidebar></Sidebar>
             <BodyWrapper>
                 <Modal isVisible={isOpenModal} onClose={() => {
                     setSalaryInput("R$ 0,00");

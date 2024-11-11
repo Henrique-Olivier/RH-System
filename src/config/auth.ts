@@ -1,3 +1,4 @@
+import { supabase } from "./supabase";
 
 
 export function verifyIfIsLogged() {
@@ -6,6 +7,14 @@ export function verifyIfIsLogged() {
     if (verify) {
         return true;
     }
-    
+
     return false;
+}
+
+
+export async function loggout() {
+
+    let { error } = await supabase.auth.signOut()
+    
+    window.location.href = './'
 } 
