@@ -24,8 +24,6 @@ function validateSamePassword(password: string, passwordConfirm: string) {
     return password === passwordConfirm;
 }
 
-
-
 export default function useRegister() {
     const [valueInputName, setValueInputName] = useState("");
     const [valueInputEmail, setValueInputEmail] = useState("");
