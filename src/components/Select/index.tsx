@@ -4,14 +4,14 @@ import { selectType } from "./types";
 
 export default function Select({ htmlFor, id, textLabel, textError, children, ...props }: selectType) {
     return(
-        <SelectContainer>
+        <SelectContainer $error={textError}>
             <label htmlFor={htmlFor}>
-                <Typography variant="body-XS">{textLabel}</Typography>
-                <SelectElement id={id} {...props}>
+                <Typography variant="body-M">{textLabel ?? ""}</Typography>
+                <SelectElement $error={textError} id={id} {...props}>
                     {children}
                 </SelectElement>
             </label>
-            <Typography variant="body-XS">{textError}</Typography>
+            <Typography variant="body-XS">{textError ?? ""}</Typography>
         </SelectContainer>
     );
 }
