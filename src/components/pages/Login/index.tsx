@@ -118,8 +118,10 @@ export default function Login() {
               textLabel={<Typography variant="body-M">Senha</Typography>}
               onChange={(e) => setPassword(e.target.value)}
             />
-          </Styles.InputBox>
           <Typography variant="body-XS">Ainda não tem cadastro? <Link to="/signUp">Cadastre-se aqui</Link></Typography>
+          <Typography variant="body-XS"><Link to="/sendmail">Esqueci minha senha</Link></Typography>
+          
+          </Styles.InputBox>
           <Button size="large" variant="main" onClick={login}>
             <Typography variant="body-M-regular">Entrar</Typography>
           </Button>

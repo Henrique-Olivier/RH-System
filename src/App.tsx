@@ -5,6 +5,8 @@ import Register from "./components/pages/Register";
 import Collaborator from "./components/pages/Collaborator";
 import Carrer from "./components/pages/Carrer";
 import Dashboard from "./components/pages/Dashboard";
+import SendMail from "./components/pages/SendMail";
+import Reset from "./components/pages/Reset";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
      <Route path="/collaborator" element={<Collaborator />}></Route>
      <Route path="/carrer" element={<Carrer />}></Route>
      <Route path="/dashboard" element={<Dashboard />}></Route>
+     <Route path="/sendmail" element={<SendMail />}></Route>
+     <Route path="/resetpassword" element={<Reset />}></Route>
     </Routes>
   );
 }
