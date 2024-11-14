@@ -7,17 +7,21 @@ import Input from "../../Input";
 import { NotificationType } from "../../notfication/types";
 import Notification from "../../notfication";
 import Sidebar from "../../Sidebar";
-import {AddBox,Container,DivButtons,InputContainer,NotificationDiv,Select,Table} from './style'
-import {CollaboratorType,PositionType} from './types'
+import { AddBox, Container, DivButtons, DivEmpty, FilterBox, FunctionsBox, InputContainer, NotificationDiv, Select, Table } from './style'
+import { CollaboratorType, PositionType } from './types'
 import { verifyIfIsLogged } from "../../../config/auth";
+import SelectDesgin from "../../Select";
+import { collaborator } from "../Dashboard/types";
+import Empty from "../../Empty";
+import iconEmpty from '../../assets/Empty.svg'
 
 export default function Collaborator() {
   useEffect(() => {
-    if(verifyIfIsLogged ()){
-    return
+    if (verifyIfIsLogged()) {
+      return
     }
     window.location.href = '../'
-  }, [] )
+  }, [])
 
   const [notificationDescribe, setNotificationDescribe] = useState("");
   const [notificationHeader, setNotificationHeader] = useState("");
@@ -42,6 +46,11 @@ export default function Collaborator() {
   const [ModalFunction, setModalFunction] = useState<'edit' | 'add'>('add')
   const [modalConfirmVisible, setModalConfirmVisible] = useState(false)
   const [idToEdit, setIdToEdit] = useState(0)
+  const [filterCollabList, setFilterCollabList] = useState<CollaboratorType[]>();
+  const [inputName, setInputName] = useState('');
+  const [inputCargo, setInputCargo] = useState(0);
+  const [showEmpty, setShowEmpty] = useState(false);
+
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const apikey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
@@ -168,6 +177,8 @@ export default function Collaborator() {
   }
 
   function showCollaboratorsRows(collaborators: CollaboratorType[]) {
+
+
 
     return collaborators.map(collaborator => {
       let colabCareer = cargos;
@@ -421,12 +432,51 @@ export default function Collaborator() {
       const collab = collaboratorList.find(collaborator => (collaborator.id == collabId))
 
       if (collab) {
-        return collab.nome
+        return collab.nome;
       }
 
     }
     return '';
   }
+
+  function filter(collaborators: collaborator[], name: string, cargoId: number): collaborator[] {
+    let filteredCollabs = collaborators;
+
+
+    const nameToSearch = stringNormalizer(name)
+
+    if (nameToSearch) {
+      filteredCollabs = filteredCollabs.filter(collaborator => {
+        const collabName = stringNormalizer(collaborator.nome)
+        return collabName.includes(nameToSearch);
+      });
+    }
+
+
+    if (cargoId) {
+      filteredCollabs = filteredCollabs.filter(collaborator => collaborator.idCargo === cargoId);
+    }
+
+    console.log('Filtered Collaborators:', filteredCollabs);
+    return filteredCollabs;
+  }
+
+  function stringNormalizer(string: String): string {
+    return string.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+
+  useEffect(() => {
+    if (collaboratorList) {
+      const filteredCollabs = filter(collaboratorList, inputName, inputCargo)
+      setFilterCollabList(filteredCollabs)
+      setShowEmpty(false)
+
+      if (filteredCollabs.length < 1) {
+        setShowEmpty(true)
+        return;
+      }
+    }
+  }, [inputName, inputCargo])
 
   return (
     <>
@@ -466,12 +516,23 @@ export default function Collaborator() {
             </DivButtons>
           </InputContainer>
         </Modal>
-        <AddBox>
-          <Typography variant="body-L">Adicionar Colaborador</Typography>
-          <Button size="large" variant="main" icon={AddSvg} onClick={openAddModal} >
-            <Typography variant="body-M-regular">Adicionar</Typography>
-          </Button>
-        </AddBox>
+        <FunctionsBox>
+          <FilterBox>
+            <Typography variant="body-L">Filtrar</Typography>
+            <Input height="default" value={inputName} onChange={e => setInputName(e.target.value)} textLabel={<Typography variant="body-M">Nome</Typography>} />
+            <SelectDesgin textLabel="Cargo" value={inputCargo} onChange={e => setInputCargo(Number(e.target.value))}>
+              <option value="0"><Typography variant="body-XS">Selecione Um Cargo</Typography></option>
+              {cargos && showPositionOptions(cargos)}
+            </SelectDesgin>
+          </FilterBox>
+
+          <AddBox>
+            <Typography variant="body-L">Adicionar Colaborador</Typography>
+            <Button size="large" variant="main" icon={AddSvg} onClick={openAddModal} >
+              <Typography variant="body-M-regular">Adicionar</Typography>
+            </Button>
+          </AddBox>
+        </FunctionsBox>
 
         <Table>
           <Typography variant="H2">Colaboradores</Typography>
@@ -491,10 +552,13 @@ export default function Collaborator() {
               </tr>
             </thead>
             <tbody>
-
-              {collaboratorList && showCollaboratorsRows(collaboratorList)}
+              {filterCollabList ? showCollaboratorsRows(filterCollabList) : collaboratorList ? showCollaboratorsRows(collaboratorList) : ''}
             </tbody>
           </table>
+
+          <DivEmpty $showEmpty={showEmpty}>
+            <Empty icon={iconEmpty} text={<Typography variant="body-M">Não foram encontrados resultados para este filtro.</Typography>} />
+          </DivEmpty>
         </Table>
       </Container>
     </>
