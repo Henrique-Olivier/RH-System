@@ -47,6 +47,9 @@ export default function useRegister() {
     const navigate = useNavigate();
 
     async function registerUser(name: string, email: string, password: string) {
+        const url = import.meta.env.VITE_SUPABASE_URL;
+        const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
@@ -57,15 +60,29 @@ export default function useRegister() {
             },
         });
 
+        if(data) {
+            await fetch(`${url}/rest/v1/permissoesDoUsuario`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    apiKey
+                },
+                body: JSON.stringify({
+                    userId: data.user?.id,
+                    permissao: 2
+                })
+            });
+        }
+
         return { data, error };
     }
-    
+
     function showNotification(type: notification) {
         setClassNotification("open");
     
         setTimeout(() => {
             setClassNotification("close");
-        }, 1500);
+        }, 3500);
     
         if(type === "error") {
             setTypeNotification("warning");
@@ -73,8 +90,8 @@ export default function useRegister() {
             setDescribeNotification("Usuario já cadastrado!")
         } else {
             setTypeNotification("success");
-            setHeaderNotification("Sucesso!");
-            setDescribeNotification("Usuario cadastrado!");
+            setHeaderNotification("E-mail Enviado!");
+            setDescribeNotification("Acesse seu e-mail para confirmar o cadastro");
         }
     }
 
@@ -87,7 +104,7 @@ export default function useRegister() {
             setButtonDisabled(false);
             setButtonClass(undefined);
             setButtonText("Cadastrar");
-        }, 1500)
+        }, 3000)
     }
 
     function verifiyForm() {
@@ -131,7 +148,7 @@ export default function useRegister() {
                     showNotification("success");
                     setTimeout(() => {
                         navigate("/");
-                    }, 2000)
+                    }, 3000);
                 }
             }, 1500)
         }

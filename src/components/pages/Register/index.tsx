@@ -6,6 +6,7 @@ import spinner from "../../assets/spinner.svg";
 import Notification from "../../notfication";
 import { Link } from "react-router-dom";
 import useRegister from "./hooks";
+import Select from "../../Select";
 
 export default function Register(){
     const { inputName, inputEmail, inputPassword, inputPasswordConfirm, notification, button, verifiyForm } = useRegister();
@@ -55,6 +56,9 @@ export default function Register(){
                     onChange={e => inputPasswordConfirm.update(e.target.value)}
                     placeholder="Ex: 123456"
                 />
+                <Select disabled textLabel="Nivel de acesso:">
+                    <option value="collab">Colaborador</option>
+                </Select>
                 <div className="link-login">
                     <Typography variant="body-XS">Já possui cadastro? <Link to="/">Faça login aqui</Link></Typography>
                 </div>
