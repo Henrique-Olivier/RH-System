@@ -2,12 +2,11 @@ import styled from "styled-components";
 import { theme } from "../../colors/colorts";
 
 export const Container = styled.div`
-    width: 100vw;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 15px 0;
 
     .alert{
         transition: bottom .5s;
@@ -47,6 +46,10 @@ export const WrapperForm = styled.div`
 
     div.link-login p{
         text-align: center;
+    }
+
+    div.link-login{
+        margin-top: 40px !important;
     }
 `;
 

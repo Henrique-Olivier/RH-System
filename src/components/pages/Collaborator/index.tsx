@@ -546,12 +546,12 @@ export default function Collaborator() {
           <FilterBox>
             <Typography variant="body-L">Filtrar</Typography>
             <Input height="default" value={inputName} onChange={e => setInputName(e.target.value)} textLabel={<Typography variant="body-M">Nome</Typography>} />
-            <SelectDesgin textLabel="Cargo" value={inputCargo} onChange={e => setInputCargo(Number(e.target.value))}>
+            <SelectDesgin height="default" textLabel="Cargo" value={inputCargo} onChange={e => setInputCargo(Number(e.target.value))}>
               <option value="0"><Typography variant="body-XS">Selecione Um Cargo</Typography></option>
               {cargos && showPositionOptions(cargos)}
             </SelectDesgin>
 
-            <SelectDesgin value={inputSalario} onChange={e => setInputSalario(e.target.value)} textLabel="Salário">
+            <SelectDesgin height="default" value={inputSalario} onChange={e => setInputSalario(e.target.value)} textLabel="Salário">
               <option value="0">Seleciona uma opção</option>
               <option value="5000">Até R$ 5.000</option>
               <option value="5000-10000">Entre R$ 5.000 e R$ 10.000</option>
