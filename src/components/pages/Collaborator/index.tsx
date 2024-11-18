@@ -593,7 +593,7 @@ export default function Collaborator() {
             </Button>
           </FilterBox>
 
-          <Conditional condition={isAdmin}>
+          <Conditional condition={isAdmin!}>
             <AddBox>
               <Typography variant="body-L">Adicionar Colaborador</Typography>
               <Button size="large" variant="main" icon={AddSvg} onClick={openAddModal} >
