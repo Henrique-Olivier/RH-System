@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { verifyIfIsLogged } from "../../../config/auth";
 import { NotificationType } from "../../notfication/types";
 import { typeModal } from "./types";
+import useVerifyAccess from "../../../hooks/useVerifyAccess";
 
 function validateName(name: string) {
     return name.length > 2;
@@ -52,8 +53,20 @@ export default function useCarrer() {
 
     const [updateList, setUpdateList] = useState(true);
 
+    const [isAdmin, setIsAdmin] = useState<boolean>();
+
     const url = import.meta.env.VITE_SUPABASE_URL;
     const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+    const userAccess = useVerifyAccess();
+
+    useEffect(() => {
+        if(userAccess == "1") {
+            setIsAdmin(true);
+        } else {
+            setIsAdmin(false);
+        }
+    }, [salaryList])
 
     useEffect(() => {
         if(verifyIfIsLogged ()){
@@ -285,6 +298,7 @@ export default function useCarrer() {
     }
 
     return {
+        isAdmin,
         carrers: {
             list: salaryList,
             showSalary: convertNumberToReal,
