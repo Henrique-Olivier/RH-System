@@ -224,9 +224,6 @@ export default function Collaborator() {
                 openEditCollaborator(Number(collabId))
               }
             }}><Typography variant="body-XS">Editar</Typography></Button></td>
-          </Conditional>
-
-          <Conditional condition={isAdmin!}>
             <td><Button size="small" variant="text" onClick={e => {
               const target = e.target as HTMLElement;
               const row = target.parentElement?.parentElement?.parentElement;
