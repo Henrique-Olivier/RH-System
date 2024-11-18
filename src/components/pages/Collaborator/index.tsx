@@ -51,6 +51,7 @@ export default function Collaborator() {
   const [inputCargo, setInputCargo] = useState(0);
   const [inputSalario, setInputSalario] = useState('0');
   const [showEmpty, setShowEmpty] = useState(false);
+  const [btnDisable, setBtnDisable] = useState(true)
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const apikey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -501,8 +502,21 @@ export default function Collaborator() {
         setShowEmpty(true)
         return;
       }
+
+      if(inputName.length > 0 || inputCargo != 0 || inputSalario != '0') {
+        setBtnDisable(false)
+      } else {
+        setBtnDisable(true)
+      } 
+
     }
   }, [inputName, inputCargo, inputSalario])
+
+  function clearFilter () {
+    setInputName("");
+    setInputCargo(0);
+    setInputSalario('0');
+  }
 
   return (
     <>
@@ -558,6 +572,10 @@ export default function Collaborator() {
               <option value="10000">Acima de R$ 10.000</option>
             </SelectDesgin>
 
+
+            <Button onClick={clearFilter} variant="main" size="large" disabled={btnDisable}>
+              <Typography variant="body-M-regular">Limpar Filtro</Typography>
+            </Button>
           </FilterBox>
 
           <AddBox>
