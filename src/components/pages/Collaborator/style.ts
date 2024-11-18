@@ -12,7 +12,17 @@ export const Container = styled.div`
 `
 
 export const AddBox = styled.div`
-  width: 25%;
+  width: 100%;
+  background-color: ${theme.grayscale.bgLightGrey};
+  display: flex;
+  flex-direction: column; 
+  padding: 20px;
+  gap: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  `
+export const FilterBox = styled.div`
+  width: 100%;
   background-color: ${theme.grayscale.bgLightGrey};
   display: flex;
   flex-direction: column; 
@@ -141,6 +151,10 @@ appearance: none; /* Remove a aparência padrão */
 }
 `
 
+export const DivEmpty = styled.div<{ $showEmpty: boolean }>`
+display: ${p => p.$showEmpty ? 'block' : 'none'} ;
+`
+
 export const NotificationDiv = styled.div<{ $isVisible: boolean }>`
   position: absolute;
   top: ${props => props.$isVisible ? '10%' : '-100%'};
@@ -148,4 +162,10 @@ export const NotificationDiv = styled.div<{ $isVisible: boolean }>`
   transform: translate(-50%,-50%);
   transition: all 0.4s;
   z-index: 9999;
+`
+export const FunctionsBox = styled.div`
+width: 25%;
+display: flex;
+flex-direction: column;
+gap: 25px;
 `

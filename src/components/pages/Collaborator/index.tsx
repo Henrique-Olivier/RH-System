@@ -7,17 +7,21 @@ import Input from "../../Input";
 import { NotificationType } from "../../notfication/types";
 import Notification from "../../notfication";
 import Sidebar from "../../Sidebar";
-import {AddBox,Container,DivButtons,InputContainer,NotificationDiv,Select,Table} from './style'
-import {CollaboratorType,PositionType} from './types'
+import { AddBox, Container, DivButtons, DivEmpty, FilterBox, FunctionsBox, InputContainer, NotificationDiv, Select, Table } from './style'
+import { CollaboratorType, PositionType } from './types'
 import { verifyIfIsLogged } from "../../../config/auth";
+import SelectDesgin from "../../Select";
+import { collaborator } from "../Dashboard/types";
+import Empty from "../../Empty";
+import iconEmpty from '../../assets/Empty.svg'
 
 export default function Collaborator() {
   useEffect(() => {
-    if(verifyIfIsLogged ()){
-    return
+    if (verifyIfIsLogged()) {
+      return
     }
     window.location.href = '../'
-  }, [] )
+  }, [])
 
   const [notificationDescribe, setNotificationDescribe] = useState("");
   const [notificationHeader, setNotificationHeader] = useState("");
@@ -42,6 +46,13 @@ export default function Collaborator() {
   const [ModalFunction, setModalFunction] = useState<'edit' | 'add'>('add')
   const [modalConfirmVisible, setModalConfirmVisible] = useState(false)
   const [idToEdit, setIdToEdit] = useState(0)
+  const [filterCollabList, setFilterCollabList] = useState<CollaboratorType[]>();
+  const [inputName, setInputName] = useState('');
+  const [inputCargo, setInputCargo] = useState(0);
+  const [inputSalario, setInputSalario] = useState('0');
+  const [showEmpty, setShowEmpty] = useState(false);
+  const [btnDisable, setBtnDisable] = useState(true)
+
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const apikey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
@@ -168,6 +179,8 @@ export default function Collaborator() {
   }
 
   function showCollaboratorsRows(collaborators: CollaboratorType[]) {
+
+
 
     return collaborators.map(collaborator => {
       let colabCareer = cargos;
@@ -421,11 +434,88 @@ export default function Collaborator() {
       const collab = collaboratorList.find(collaborator => (collaborator.id == collabId))
 
       if (collab) {
-        return collab.nome
+        return collab.nome;
       }
 
     }
     return '';
+  }
+
+
+
+
+  function filter(collaborators: collaborator[], name: string, cargoId: number, salario: string): collaborator[] {
+    let filteredCollabs = collaborators;
+
+
+    const nameToSearch = stringNormalizer(name)
+
+    if (nameToSearch) {
+      filteredCollabs = filteredCollabs.filter(collaborator => {
+        const collabName = stringNormalizer(collaborator.nome)
+        return collabName.includes(nameToSearch);
+      });
+    }
+
+
+    if (cargoId) {
+      filteredCollabs = filteredCollabs.filter(collaborator => collaborator.idCargo === cargoId);
+    }
+
+    if (salario != '0') {
+      filteredCollabs = filteredCollabs.filter(collaborator => {
+
+        let colabCareer = cargos?.find(cargo => cargo.id == collaborator.idCargo);
+
+        if (colabCareer) {
+
+          if (salario == '5000') {
+            return colabCareer?.salario <= 5000
+          }
+
+          if (salario == '5000-10000') {
+            return colabCareer?.salario > 5000 && colabCareer?.salario < 10000
+          }
+
+          if (salario == '10000') {
+            return colabCareer?.salario >= 10000
+          }
+        }
+      })
+    }
+
+    console.log('Filtered Collaborators:', filteredCollabs);
+    return filteredCollabs;
+  }
+
+  function stringNormalizer(string: String): string {
+    return string.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+
+  useEffect(() => {
+    if (collaboratorList) {
+      const filteredCollabs = filter(collaboratorList, inputName, inputCargo, inputSalario)
+      setFilterCollabList(filteredCollabs)
+      setShowEmpty(false)
+
+      if (filteredCollabs.length < 1) {
+        setShowEmpty(true)
+        return;
+      }
+
+      if(inputName.length > 0 || inputCargo != 0 || inputSalario != '0') {
+        setBtnDisable(false)
+      } else {
+        setBtnDisable(true)
+      } 
+
+    }
+  }, [inputName, inputCargo, inputSalario])
+
+  function clearFilter () {
+    setInputName("");
+    setInputCargo(0);
+    setInputSalario('0');
   }
 
   return (
@@ -466,12 +556,35 @@ export default function Collaborator() {
             </DivButtons>
           </InputContainer>
         </Modal>
-        <AddBox>
-          <Typography variant="body-L">Adicionar Colaborador</Typography>
-          <Button size="large" variant="main" icon={AddSvg} onClick={openAddModal} >
-            <Typography variant="body-M-regular">Adicionar</Typography>
-          </Button>
-        </AddBox>
+        <FunctionsBox>
+          <FilterBox>
+            <Typography variant="body-L">Filtrar</Typography>
+            <Input height="default" value={inputName} onChange={e => setInputName(e.target.value)} textLabel={<Typography variant="body-M">Nome</Typography>} />
+            <SelectDesgin height="default" textLabel="Cargo" value={inputCargo} onChange={e => setInputCargo(Number(e.target.value))}>
+              <option value="0"><Typography variant="body-XS">Selecione Um Cargo</Typography></option>
+              {cargos && showPositionOptions(cargos)}
+            </SelectDesgin>
+
+            <SelectDesgin height="default" value={inputSalario} onChange={e => setInputSalario(e.target.value)} textLabel="Salário">
+              <option value="0">Seleciona uma opção</option>
+              <option value="5000">Até R$ 5.000</option>
+              <option value="5000-10000">Entre R$ 5.000 e R$ 10.000</option>
+              <option value="10000">Acima de R$ 10.000</option>
+            </SelectDesgin>
+
+
+            <Button onClick={clearFilter} variant="main" size="large" disabled={btnDisable}>
+              <Typography variant="body-M-regular">Limpar Filtro</Typography>
+            </Button>
+          </FilterBox>
+
+          <AddBox>
+            <Typography variant="body-L">Adicionar Colaborador</Typography>
+            <Button size="large" variant="main" icon={AddSvg} onClick={openAddModal} >
+              <Typography variant="body-M-regular">Adicionar</Typography>
+            </Button>
+          </AddBox>
+        </FunctionsBox>
 
         <Table>
           <Typography variant="H2">Colaboradores</Typography>
@@ -491,10 +604,13 @@ export default function Collaborator() {
               </tr>
             </thead>
             <tbody>
-
-              {collaboratorList && showCollaboratorsRows(collaboratorList)}
+              {filterCollabList ? showCollaboratorsRows(filterCollabList) : collaboratorList ? showCollaboratorsRows(collaboratorList) : ''}
             </tbody>
           </table>
+
+          <DivEmpty $showEmpty={showEmpty}>
+            <Empty icon={iconEmpty} text={<Typography variant="body-M">Não foram encontrados resultados para este filtro.</Typography>} />
+          </DivEmpty>
         </Table>
       </Container>
     </>
