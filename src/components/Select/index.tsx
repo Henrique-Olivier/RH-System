@@ -3,7 +3,7 @@ import { SelectContainer, SelectElement } from "./styles";
 import { selectType } from "./types";
 
 export default function Select({ htmlFor, id, textLabel, textError, children, ...props }: selectType) {
-    return(
+    return (
         <SelectContainer $error={textError}>
             <label htmlFor={htmlFor}>
                 <Typography variant="body-M">{textLabel ?? ""}</Typography>

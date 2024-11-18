@@ -23,7 +23,7 @@ export const AddBox = styled.div`
   `
 export const FilterBox = styled.div`
   width: 100%;
-  height: 275px;
+  height: 350px;
   background-color: ${theme.grayscale.bgLightGrey};
   display: flex;
   flex-direction: column; 

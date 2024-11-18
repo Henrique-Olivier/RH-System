@@ -49,6 +49,7 @@ export default function Collaborator() {
   const [filterCollabList, setFilterCollabList] = useState<CollaboratorType[]>();
   const [inputName, setInputName] = useState('');
   const [inputCargo, setInputCargo] = useState(0);
+  const [inputSalario, setInputSalario] = useState('0');
   const [showEmpty, setShowEmpty] = useState(false);
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -439,7 +440,10 @@ export default function Collaborator() {
     return '';
   }
 
-  function filter(collaborators: collaborator[], name: string, cargoId: number): collaborator[] {
+
+
+
+  function filter(collaborators: collaborator[], name: string, cargoId: number, salario: string): collaborator[] {
     let filteredCollabs = collaborators;
 
 
@@ -457,6 +461,28 @@ export default function Collaborator() {
       filteredCollabs = filteredCollabs.filter(collaborator => collaborator.idCargo === cargoId);
     }
 
+    if (salario != '0') {
+      filteredCollabs = filteredCollabs.filter(collaborator => {
+
+        let colabCareer = cargos?.find(cargo => cargo.id == collaborator.idCargo);
+
+        if (colabCareer) {
+
+          if (salario == '5000') {
+            return colabCareer?.salario <= 5000
+          }
+
+          if (salario == '5000-10000') {
+            return colabCareer?.salario > 5000 && colabCareer?.salario < 10000
+          }
+
+          if (salario == '10000') {
+            return colabCareer?.salario >= 10000
+          }
+        }
+      })
+    }
+
     console.log('Filtered Collaborators:', filteredCollabs);
     return filteredCollabs;
   }
@@ -467,7 +493,7 @@ export default function Collaborator() {
 
   useEffect(() => {
     if (collaboratorList) {
-      const filteredCollabs = filter(collaboratorList, inputName, inputCargo)
+      const filteredCollabs = filter(collaboratorList, inputName, inputCargo, inputSalario)
       setFilterCollabList(filteredCollabs)
       setShowEmpty(false)
 
@@ -476,7 +502,7 @@ export default function Collaborator() {
         return;
       }
     }
-  }, [inputName, inputCargo])
+  }, [inputName, inputCargo, inputSalario])
 
   return (
     <>
@@ -524,6 +550,14 @@ export default function Collaborator() {
               <option value="0"><Typography variant="body-XS">Selecione Um Cargo</Typography></option>
               {cargos && showPositionOptions(cargos)}
             </SelectDesgin>
+
+            <SelectDesgin value={inputSalario} onChange={e => setInputSalario(e.target.value)} textLabel="Salário">
+              <option value="0">Seleciona uma opção</option>
+              <option value="5000">Até R$ 5.000</option>
+              <option value="5000-10000">Entre R$ 5.000 e R$ 10.000</option>
+              <option value="10000">Acima de R$ 10.000</option>
+            </SelectDesgin>
+
           </FilterBox>
 
           <AddBox>
