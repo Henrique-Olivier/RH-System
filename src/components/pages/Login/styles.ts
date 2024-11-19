@@ -45,3 +45,9 @@ top: ${(props) => (props.$isVisible ? "15%" : "-100%")};
 transform: translate(-50%, -50%);
 transition: 1s ease-in-out;
 `;
+
+export const Cadastrese = styled.div `
+display: flex;
+gap: 5px;
+align-itens: start;
+`

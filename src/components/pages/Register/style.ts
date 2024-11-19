@@ -50,6 +50,9 @@ export const WrapperForm = styled.div`
 
     div.link-login{
         margin-top: 40px !important;
+        display: flex;
+        justify-content: center ;
+        gap: 5px;
     }
 `;
 

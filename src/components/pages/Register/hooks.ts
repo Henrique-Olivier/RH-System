@@ -44,7 +44,7 @@ export default function useRegister() {
     const [buttonClass, setButtonClass] = useState<classButton>(undefined);
     const [buttonText, setButtonText] = useState<textButton>("Cadastrar");
 
-    const navigate = useNavigate();
+
 
     async function registerUser(name: string, email: string, password: string) {
         const url = import.meta.env.VITE_SUPABASE_URL;
@@ -106,6 +106,8 @@ export default function useRegister() {
             setButtonText("Cadastrar");
         }, 3000)
     }
+
+
 
     function verifiyForm() {
         const isNameValid = validateName(valueInputName);
