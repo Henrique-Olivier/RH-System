@@ -11,6 +11,8 @@ import Select from "../../Select"
 import { json } from "react-router-dom"
 import { NotificationType } from "../../notfication/types"
 import Notification from "../../notfication"
+import Conditional from "../../Conditional"
+import useVerifyAccess from "../../../hooks/useVerifyAccess"
 
 const Body = styled.div`
 width: 100vw;
@@ -132,7 +134,8 @@ export default function Users() {
     const [usersList, setUserList] = useState<IUser[]>()
     const [userPermissionList, setuserPermissionList] = useState<UserPermission[]>()
     const [permissionList, setPermissionList] = useState<Permission[]>()
-    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [isModalEditVisible, setIsModalVisible] = useState(false)
+    const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false)
     const [selectedUserId, setSelectedUserId] = useState("")
     const [email, setEmail] = useState("")
     const [nome, setNome] = useState("")
@@ -143,9 +146,20 @@ export default function Users() {
     const [notificationType, setNotificationType] = useState<NotificationType>("inform");
     const [notificationIsVisible, setNotificationIsVisible] = useState(false);
 
+    const [isAdmin, setIsAdmin] = useState<boolean>();
+
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const apikey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+    const userAccess = useVerifyAccess();
+
+    useEffect(() => {
+        if(userAccess == "1") {
+            setIsAdmin(true);
+        } else {
+            setIsAdmin(false);
+        }
+    }, [usersList])
 
     useEffect(() => {
         getUserPermission()
@@ -250,23 +264,33 @@ export default function Users() {
                         <th><Typography variant="body-S">{user.email || 'Indisponivel'}</Typography></th>
                         <th><Typography variant="body-S">{user.name || 'Indisponivel'}</Typography></th>
                         <th><Typography variant="body-S">{permission?.permission == 1 ? 'Admin' : permission?.permission == 2 ? 'Editor' : 'Indisponivel'}</Typography></th>
-                        <th>
-                            <Button variant='text' onClick={(event) => {
-                                const target = event.target as HTMLElement;
-                                const row = target.parentElement?.parentElement?.parentElement;
-                                if (row) {
-                                    const userId = row.dataset.id!
-                                    openEditModal(userId)
-                                }
-                            }} size="large">
-                                <Typography variant="body-S">Editar</Typography>
-                            </Button>
-                        </th>
-                        <th>
-                            <Button variant='text' size="large">
-                                <Typography variant="body-S">Excluir</Typography>
-                            </Button>
-                        </th>
+                        
+                        <Conditional condition={isAdmin!}>
+                            <th>
+                                <Button variant='text' onClick={(event) => {
+                                    const target = event.target as HTMLElement;
+                                    const row = target.parentElement?.parentElement?.parentElement;
+                                    if (row) {
+                                        const userId = row.dataset.id!
+                                        openEditModal(userId)
+                                    }
+                                }} size="large">
+                                    <Typography variant="body-S">Editar</Typography>
+                                </Button>
+                            </th>
+                            <th>
+                                <Button variant='text' onClick={(event) => {
+                                    const target = event.target as HTMLElement;
+                                    const row = target.parentElement?.parentElement?.parentElement;
+                                    if (row) {
+                                        const userId = row.dataset.id!
+                                        openDeleteModal(userId)
+                                    }
+                                }} size="large">
+                                    <Typography variant="body-S">Excluir</Typography>
+                                </Button>
+                            </th>
+                        </Conditional>
 
                     </tr >
                 )
@@ -281,6 +305,7 @@ export default function Users() {
         setCargo(0)
         setEmail("")
     }
+
     function openModal() {
         setIsModalVisible(true)
     }
@@ -296,6 +321,18 @@ export default function Users() {
                 setEmail(selectedUser.email || '')
                 setNome(selectedUser.name || '')
                 setCargo(permission.permission)
+            }
+        }
+    }
+
+    function openDeleteModal(userId: string) {
+        setIsModalDeleteVisible(true);
+        setSelectedUserId(userId)
+        if (usersList && userPermissionList) {
+            const selectedUser = usersList.find(user => user.id == userId);
+
+            if (selectedUser) {
+                setNome(selectedUser.name || '')
             }
         }
     }
@@ -353,6 +390,23 @@ export default function Users() {
         }
     }
 
+    async function deleteUser() {
+        try {
+            const { data, error } = await supabase.auth.admin.deleteUser(selectedUserId);
+
+            if (error) {
+                console.error('Erro ao atualizar o usuário:', error);
+                return;
+            } else {
+                console.log('Usuario deletado com sucesso:', data);
+                showNotification('Usuário deletado com sucesso.', 'Sucesso', 'success')
+            }
+
+        } catch (error) {
+            console.error(error)
+            showNotification('Não foi possivel deletar, tente novamente mais tarde.', 'Erro ao deletar', 'error', 4500)
+        }
+    }
 
     function showNotification(
         describe: string,
@@ -373,7 +427,7 @@ export default function Users() {
                 <Notification type={notificationType} model='informer' describe={notificationDescribe} header={notificationHeader} />
             </NotificationDiv>
             <Sidebar />
-            <Modal isVisible={isModalVisible} onClose={closeModal}>
+            <Modal isVisible={isModalEditVisible} onClose={closeModal}>
                 <Typography variant="body-L">Editar Usuário</Typography>
                 <ModalContent>
                     <Input disabled height="default" value={email} onChange={e => setEmail(e.target.value)} textLabel={<Typography variant="body-M-regular">Email</Typography>} />
@@ -387,6 +441,14 @@ export default function Users() {
                         <Button variant="main" size="large" onClick={editUser}><Typography variant="body-M-regular">Editar</Typography></Button>
                     </BtnDiv>
                 </ModalContent>
+            </Modal>
+
+            <Modal isVisible={isModalDeleteVisible} onClose={() => setIsModalDeleteVisible(false)}>
+                <Typography variant="body-M-regular">Deseja deletar o usuario {nome}?</Typography>
+                <BtnDiv>
+                    <Button variant="secondary" size="large" onClick={closeModal}><Typography variant="body-M-regular">Cancelar</Typography></Button>
+                    <Button variant="main" size="large" onClick={deleteUser}><Typography variant="body-M-regular">Deletar</Typography></Button>
+                </BtnDiv>
             </Modal>
             <UserCard>
                 <Typography variant="H2">Usuários do Sistema</Typography>
