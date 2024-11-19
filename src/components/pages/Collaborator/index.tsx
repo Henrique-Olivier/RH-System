@@ -14,6 +14,8 @@ import SelectDesgin from "../../Select";
 import { collaborator } from "../Dashboard/types";
 import Empty from "../../Empty";
 import iconEmpty from '../../assets/Empty.svg'
+import useVerifyAccess from "../../../hooks/useVerifyAccess";
+import Conditional from "../../Conditional";
 
 export default function Collaborator() {
   useEffect(() => {
@@ -22,12 +24,12 @@ export default function Collaborator() {
     }
     window.location.href = '../'
   }, [])
-
+  
   const [notificationDescribe, setNotificationDescribe] = useState("");
   const [notificationHeader, setNotificationHeader] = useState("");
   const [notificationType, setNotificationType] = useState<NotificationType>("inform");
   const [notificationIsVisible, setNotificationIsVisible] = useState(false);
-
+  
   const [modalIsVisible, setModalIsVisible] = useState(false);
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
@@ -51,12 +53,23 @@ export default function Collaborator() {
   const [inputCargo, setInputCargo] = useState(0);
   const [inputSalario, setInputSalario] = useState('0');
   const [showEmpty, setShowEmpty] = useState(false);
-  const [btnDisable, setBtnDisable] = useState(true)
+  const [btnDisable, setBtnDisable] = useState(true);
 
+  const [isAdmin, setIsAdmin] = useState<boolean>();
+  
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const apikey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  
+  const userAccess = useVerifyAccess();
 
-
+  useEffect(() => {
+    if(userAccess == "1") {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }, [collaboratorList])
+  
   useEffect(() => {
     if (isValidCep(cep)) {
       getLocationByCep(cep)
@@ -180,8 +193,6 @@ export default function Collaborator() {
 
   function showCollaboratorsRows(collaborators: CollaboratorType[]) {
 
-
-
     return collaborators.map(collaborator => {
       let colabCareer = cargos;
 
@@ -201,24 +212,28 @@ export default function Collaborator() {
           <td><Typography variant="body-XS">{colabCareer && colabCareer[0]?.nomeDoCargo || ''}</Typography></td>
           <td><Typography variant="body-XS">{colabCareer && colabCareer[0]?.nivel || ''}</Typography></td>
           <td><Typography variant="body-XS">
-            {colabCareer && colabCareer[0]?.salario.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', }) || ''}</Typography></td>
-          <td><Button size="small" variant="text" onClick={e => {
-            const target = e.target as HTMLElement;
-            const row = target.parentElement?.parentElement?.parentElement;
-            if (row) {
-              const collabId = row.dataset.id
-              openEditCollaborator(Number(collabId))
-            }
-          }}><Typography variant="body-XS">Editar</Typography></Button></td>
-          <td><Button size="small" variant="text" onClick={e => {
-            const target = e.target as HTMLElement;
-            const row = target.parentElement?.parentElement?.parentElement;
-            if (row) {
-              const collabId = row.dataset.id
-              openModalConfirm()
-              setIdToEdit(Number(collabId))
-            }
-          }}><Typography variant="body-XS" >Remover</Typography></Button></td>
+            {colabCareer && colabCareer[0]?.salario.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', }) || ''}</Typography>
+          </td>
+
+          <Conditional condition={isAdmin!}>
+            <td><Button size="small" variant="text" onClick={e => {
+              const target = e.target as HTMLElement;
+              const row = target.parentElement?.parentElement?.parentElement;
+              if (row) {
+                const collabId = row.dataset.id
+                openEditCollaborator(Number(collabId))
+              }
+            }}><Typography variant="body-XS">Editar</Typography></Button></td>
+            <td><Button size="small" variant="text" onClick={e => {
+              const target = e.target as HTMLElement;
+              const row = target.parentElement?.parentElement?.parentElement;
+              if (row) {
+                const collabId = row.dataset.id
+                openModalConfirm()
+                setIdToEdit(Number(collabId))
+              }
+            }}><Typography variant="body-XS" >Remover</Typography></Button></td>
+          </Conditional>
         </tr>
       )
     })
@@ -578,12 +593,14 @@ export default function Collaborator() {
             </Button>
           </FilterBox>
 
-          <AddBox>
-            <Typography variant="body-L">Adicionar Colaborador</Typography>
-            <Button size="large" variant="main" icon={AddSvg} onClick={openAddModal} >
-              <Typography variant="body-M-regular">Adicionar</Typography>
-            </Button>
-          </AddBox>
+          <Conditional condition={isAdmin!}>
+            <AddBox>
+              <Typography variant="body-L">Adicionar Colaborador</Typography>
+              <Button size="large" variant="main" icon={AddSvg} onClick={openAddModal} >
+                <Typography variant="body-M-regular">Adicionar</Typography>
+              </Button>
+            </AddBox>
+          </Conditional>
         </FunctionsBox>
 
         <Table>

@@ -8,9 +8,10 @@ import Notification from "../../notfication";
 import Sidebar from "../../Sidebar";
 import { dataType, typeModal } from "./types";
 import useCarrer from "./hooks";
+import Conditional from "../../Conditional";
 
 export default function Carrer() {
-    const { carrers, inputNameModal, inputLevelModal, inputSalaryModal, modal, notification, register } = useCarrer();
+    const { isAdmin, carrers, inputNameModal, inputLevelModal, inputSalaryModal, modal, notification, register } = useCarrer();
 
     function showData(data: dataType[]) {
         return data.map(value => (
@@ -18,9 +19,12 @@ export default function Carrer() {
                 <td><Typography variant="body-XS">{value.nomeDoCargo}</Typography></td>
                 <td><Typography variant="body-XS">{value.nivel}</Typography></td>
                 <td><Typography variant="body-XS">{carrers.showSalary(value.salario)}</Typography></td>
-                <td className="action-btn"><Button variant="text" size="small" onClick={carrers.handleEditClick}>Editar</Button>
-                    <Button variant="text" size="small" onClick={carrers.handleDeleteClick}>Deletar</Button>    
-                </td>
+
+                <Conditional condition={isAdmin!}>
+                    <td className="action-btn"><Button variant="text" size="small" onClick={carrers.handleEditClick}>Editar</Button>
+                        <Button variant="text" size="small" onClick={carrers.handleDeleteClick}>Deletar</Button>    
+                    </td>
+                </Conditional>
             </tr>
         ));
     }
@@ -83,9 +87,11 @@ export default function Carrer() {
                 <ListingContainer>
                     <div>
                         <Typography variant="H4">Cargos</Typography>
-                        <Button variant="main" size="medium" onClick={carrers.handleAddClick}>
-                            Adicionar
-                        </Button>
+                        <Conditional condition={isAdmin!}>
+                            <Button variant="main" size="medium" onClick={carrers.handleAddClick}>
+                                Adicionar
+                            </Button>
+                        </Conditional>
                     </div>
                     <table>
                         <thead>
@@ -93,7 +99,6 @@ export default function Carrer() {
                                 <th><Typography variant="body-S">Nome</Typography></th>
                                 <th><Typography variant="body-S">Nível</Typography></th>
                                 <th><Typography variant="body-S">Salario</Typography></th>
-                                <th><Typography variant="body-S">Ação</Typography></th>
                             </tr>
                         </thead>
                         <tbody>
