@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const InputContainer = styled.div<{ $error?: string; $disable: boolean; $isActive: boolean }>`
+export const InputContainer = styled.div<{ $error?: React.ReactNode |string; $disable: boolean; $isActive: boolean }>`
     display: flex;
     flex-direction: column;
     width: 100%;

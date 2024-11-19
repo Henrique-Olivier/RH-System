@@ -71,7 +71,7 @@ export default function Carrer() {
                 <>
                     <Notification className={`notification ${notification.class}`} header={notification.header} describe={notification.describe} model="informer" type={notification.type}>Deu bom</Notification>
                     <Typography variant="H3">{modal.title}</Typography>
-                    <Typography variant="body-S">Deseja deletar o cargo {inputNameModal.value}, {inputLevelModal.value}?</Typography>
+                    <Typography variant="body-S">{`Deseja deletar o cargo ${inputNameModal.value}, ${inputLevelModal.value}?`}</Typography>
                     <Button className="btn-modal" variant="main" size="medium" icon={loading} onClick={(e) => register.delete(e.currentTarget)}>{modal.buttonText}</Button>
                 </>
             );

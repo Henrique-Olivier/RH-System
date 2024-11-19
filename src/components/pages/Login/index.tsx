@@ -13,7 +13,7 @@ import { verifyIfIsLogged } from "../../../config/auth";
 export default function Login() {
 
   useEffect(() => {
-    if(verifyIfIsLogged ()){
+    if(verifyIfIsLogged()){
       window.location.href = './dashboard'
     }
     return
@@ -118,8 +118,8 @@ export default function Login() {
               textLabel={<Typography variant="body-M">Senha</Typography>}
               onChange={(e) => setPassword(e.target.value)}
             />
-          <Typography variant="body-XS">Ainda não tem cadastro? <Link to="/signUp">Cadastre-se aqui</Link></Typography>
-          <Typography variant="body-XS"><Link to="/sendmail">Esqueci minha senha</Link></Typography>
+          <Typography variant="body-XS">{`Ainda não tem cadastro? ${<Link to="/signUp">Cadastre-se aqui</Link>}`}</Typography>
+          <Typography variant="body-XS">{`${<Link to="/sendmail">Esqueci minha senha</Link>}`}</Typography>
           
           </Styles.InputBox>
           <Button size="large" variant="main" onClick={login}>

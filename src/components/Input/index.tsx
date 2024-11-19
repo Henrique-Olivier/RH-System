@@ -1,12 +1,12 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { CustomInputProps } from "./types";
 import * as S from "./style";
 
-function showLabel(textLabel: string | undefined) {
+function showLabel(textLabel:  React.ReactNode | string | undefined) {
     return textLabel ? <label htmlFor="text">{textLabel}</label> : null;
 };
 
-function showError(textError: string | undefined) {
+function showError(textError: React.ReactNode | string | undefined) {
     return textError ? <p>{textError}</p> : null;
 };
 
