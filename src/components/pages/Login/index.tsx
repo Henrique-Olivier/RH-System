@@ -6,18 +6,18 @@ import { supabase } from "../../../config/supabase";
 import Notification from "../../notfication";
 import { NotificationType } from "../../notfication/types";
 import * as Styles from './styles'
-import { Link, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import { verifyIfIsLogged } from "../../../config/auth";
 
 
 export default function Login() {
 
   useEffect(() => {
-    if(verifyIfIsLogged ()){
+    if (verifyIfIsLogged()) {
       window.location.href = './dashboard'
     }
     return
-  }, [] )
+  }, [])
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -88,6 +88,13 @@ export default function Login() {
     setTimeout(() => setNotificationIsVisible(false), time);
   }
 
+  function goToRegister () {
+    navigate('./signup')
+  }
+  function goToReset () {
+    navigate('./resetpassword')
+  }
+
   return (
     <>
       <Styles.NotificationControlDiv $isVisible={notificationIsVisible}>
@@ -118,9 +125,12 @@ export default function Login() {
               textLabel={<Typography variant="body-M">Senha</Typography>}
               onChange={(e) => setPassword(e.target.value)}
             />
-          <Typography variant="body-XS">Ainda não tem cadastro? <Link to="/signUp">Cadastre-se aqui</Link></Typography>
-          <Typography variant="body-XS"><Link to="/sendmail">Esqueci minha senha</Link></Typography>
-          
+            <Styles.Cadastrese>
+              <Typography variant="body-XS">Ainda não tem cadastro? </Typography> <Button size="large" variant="link" onClick={goToRegister}> <Typography variant="body-XS"> Cadastre-se.</Typography></Button>
+            </Styles.Cadastrese>
+            <Styles.Cadastrese>
+            <Button size="large" variant="link" onClick={goToReset}><Typography variant="body-XS">Esqueci minha senha.</Typography></Button>
+            </Styles.Cadastrese>
           </Styles.InputBox>
           <Button size="large" variant="main" onClick={login}>
             <Typography variant="body-M-regular">Entrar</Typography>

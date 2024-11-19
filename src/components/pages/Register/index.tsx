@@ -4,16 +4,22 @@ import Typography from "../../Typography";
 import { Container, ContainerButton, WrapperForm } from "./style";
 import spinner from "../../assets/spinner.svg";
 import Notification from "../../notfication";
-import { Link } from "react-router-dom";
 import useRegister from "./hooks";
 import Select from "../../Select";
+import { useNavigate } from "react-router-dom";
 
-export default function Register(){
+
+export default function Register() {
     const { inputName, inputEmail, inputPassword, inputPasswordConfirm, notification, button, verifiyForm } = useRegister();
+
+    const navigate = useNavigate();
+    function goToLogin() {
+        navigate("../")
+    }
 
     return (
         <Container>
-            <Notification id="notification" className={`alert ${notification.class}`} header={notification.header} describe={notification.describe} model="informer" type={notification.type}/>
+            <Notification id="notification" className={`alert ${notification.class}`} header={notification.header} describe={notification.describe} model="informer" type={notification.type} />
             <WrapperForm className="form">
                 <Typography variant="H2">Cadastre-se</Typography>
                 <Input
@@ -56,11 +62,11 @@ export default function Register(){
                     onChange={e => inputPasswordConfirm.update(e.target.value)}
                     placeholder="Ex: 123456"
                 />
-                <Select disabled textLabel="Nivel de acesso:">
+                <Select height="default" disabled textLabel="Nivel de acesso:">
                     <option value="collab">Colaborador</option>
                 </Select>
                 <div className="link-login">
-                    <Typography variant="body-XS">Já possui cadastro? <Link to="/">Faça login aqui</Link></Typography>
+                    <Typography variant="body-XS">Já possui cadastro?</Typography><Button size="large" variant="link" onClick={goToLogin }><Typography variant="body-XS">Faça login</Typography></Button>
                 </div>
                 <ContainerButton>
                     <Button id="btn-register" className={button.class} disabled={button.disabled} variant="main" size="medium" onClick={verifiyForm} icon={spinner}>
