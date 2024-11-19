@@ -33,9 +33,11 @@ interface ChartData {
   salario: number;
 }
 
-const renderActiveShape = ({payload, ...props}: propsGraph) => {
+const renderActiveShape = (props: unknown) => {
+  const { payload, ...restProps } = props as propsGraph;
+
   const RADIAN = Math.PI / 180;
-  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, percent, value } = props;
+  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, percent, value } = restProps;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
   const sx = cx + (outerRadius + 10) * cos;
@@ -87,7 +89,7 @@ export default function Dashboard() {
   const [valueSelect, setValueSelect] = useState<selectType | string>("region");
   const [titleGraph, setTitleGraph] = useState("funcionarios por estado")
 
-  const [listDataGraph, setListDataGraph] = useState<payload<string | number>[]>([]);
+  const [listDataGraph, setListDataGraph] = useState<payload[]>([]);
 
   const onPieEnter = useCallback(
     (_: unknown, index: number) => {
@@ -223,11 +225,11 @@ export default function Dashboard() {
       const resultado = countCollabsCarrers.map(item => {
         const nome = mapaNomes.get(item.id); // Busca o nome usando o id
         const salario = salariesMap.get(item.id);
-  
+        
         return {
           qtd: item.count,
           name: nome!,
-          value: salario || "",
+          value: salario!,
         };
       });
       
