@@ -83,13 +83,13 @@ let showValue = false;
 export default function Dashboard() {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const [valueSelect, setValueSelect] = useState<selectType>("region");
+  const [valueSelect, setValueSelect] = useState<selectType | string>("region");
   const [titleGraph, setTitleGraph] = useState("funcionarios por estado")
 
   const [listDataGraph, setListDataGraph] = useState<payload<string | number>[]>([]);
 
   const onPieEnter = useCallback(
-    (_, index: number) => {
+    (_: unknown, index: number) => {
       setActiveIndex(index);
     },
     [setActiveIndex]
@@ -183,46 +183,50 @@ export default function Dashboard() {
     return result;
   }
 
-  function mappingSalaries(listCarrers: carrers[], listCollabs: collaborator[]) {
+  function mappingSalaries(listCarrers: carrers[], listCollabs: collaborator[] | null) {
     const idsLista2 = new Set(listCarrers.map(item => item.id));
 
     // Contar as ocorrências dos ids de lista1 que estão em lista2
-    const countCollabsCarrers = listCollabs.reduce((acc: { id: number, count: number }[], item) => {
-      if (idsLista2.has(item.idCargo)) {
-        // Verifica se o id já foi adicionado ao resultado
-        const existing = acc.find(r => r.id === item.idCargo);
-        if (existing) {
-          // Se já existe, incrementa a contagem
-          existing.count += 1;
-        } else {
-          // Se não existe, adiciona o novo id com contagem 1
-          acc.push({ id: item.idCargo, count: 1 });
+    if(listCollabs) {
+      const countCollabsCarrers = listCollabs.reduce((acc: { id: number, count: number }[], item) => {
+        if (idsLista2.has(item.idCargo)) {
+          // Verifica se o id já foi adicionado ao resultado
+          const existing = acc.find(r => r.id === item.idCargo);
+          if (existing) {
+            // Se já existe, incrementa a contagem
+            existing.count += 1;
+          } else {
+            // Se não existe, adiciona o novo id com contagem 1
+            acc.push({ id: item.idCargo, count: 1 });
+          }
         }
-      }
-      return acc;
-    }, []);
+        return acc;
+      }, []);
 
-    const mapaNomes = new Map<number, string>(
-      listCarrers.map(item => [item.id, item.nomeDoCargo])
-    );
+      const mapaNomes = new Map<number, string>(
+        listCarrers.map(item => [item.id, item.nomeDoCargo])
+      );
+  
+      const salariesMap = new Map<number, number>(
+        listCarrers.map(item => [item.id, item.salario])
+      );
+  
+      // Iterar sobre listaComContagem e adicionar o nome de lista2
+      const resultado = countCollabsCarrers.map(item => {
+        const nome = mapaNomes.get(item.id); // Busca o nome usando o id
+        const salario = salariesMap.get(item.id);
+  
+        return {
+          qtd: item.count,
+          name: nome!,
+          value: salario || "",
+        };
+      });
+      
+      return resultado;
+    }
 
-    const salariesMap = new Map<number, number>(
-      listCarrers.map(item => [item.id, item.salario])
-    );
-
-    // Iterar sobre listaComContagem e adicionar o nome de lista2
-    const resultado = countCollabsCarrers.map(item => {
-      const nome = mapaNomes.get(item.id); // Busca o nome usando o id
-      const salario = salariesMap.get(item.id);
-
-      return {
-        qtd: item.count,
-        name: nome!,
-        value: salario,
-      };
-    });
-    
-    return resultado;
+    return [];
 
   }
 
@@ -328,7 +332,7 @@ export default function Dashboard() {
       label?: string;
   }
 
-  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+  const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
       if (active && payload && payload.length) {
           const { cargo, Quantidade, salario } = payload[0].payload;
           return (
@@ -365,7 +369,7 @@ export default function Dashboard() {
               <div>
                 <label htmlFor="select-type-pie">
                   <Typography variant="body-XS">Selecione a comparação:</Typography>
-                  <Select id="select-type-pie" value={valueSelect} onChange={(e) => setValueSelect(e.target.value)}>
+                  <Select id="select-type-pie" value={valueSelect} onChange={(e) => setValueSelect(e.currentTarget.value)}>
                     <option value="region">Estado</option>
                     <option value="salary">Salario</option>
                   </Select>
@@ -385,7 +389,7 @@ export default function Dashboard() {
                   onMouseEnter={onPieEnter}
               />
               </PieChart>
-              <Typography variant="H4">Comparativo de {titleGraph}</Typography>
+              <Typography variant="H4">{`Comparativo de ${titleGraph}`}</Typography>
             </div>
           </CardContainer>
       </BodyContainer>
