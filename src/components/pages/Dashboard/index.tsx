@@ -5,6 +5,7 @@ import { PieChart, Pie, Sector, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, 
 import { carrers, collaborator, payload, propsGraph, selectType } from "./types";
 import { theme } from "../../colors/colorts";
 import Sidebar from "../../Sidebar";
+import { verifyIfIsLogged } from "../../../config/auth";
 
 let textTooltip: string;
 
@@ -97,6 +98,13 @@ export default function Dashboard() {
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const apikey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  useEffect(() => {
+    if(verifyIfIsLogged()){
+      return
+    }
+    window.location.href = '../'
+  },[])
 
   useEffect(() => {
     if(valueSelect === "region") {
