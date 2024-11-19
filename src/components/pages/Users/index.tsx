@@ -152,7 +152,7 @@ export default function Users() {
     const apikey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
     const userAccess = useVerifyAccess();
-
+    
     useEffect(() => {
         if(userAccess == "1") {
             setIsAdmin(true);
@@ -444,7 +444,7 @@ export default function Users() {
             </Modal>
 
             <Modal isVisible={isModalDeleteVisible} onClose={() => setIsModalDeleteVisible(false)}>
-                <Typography variant="body-M-regular">Deseja deletar o usuario {nome}?</Typography>
+                <Typography variant="body-M-regular">{`Deseja deletar o usuario ${nome}?`}</Typography>
                 <BtnDiv>
                     <Button variant="secondary" size="large" onClick={closeModal}><Typography variant="body-M-regular">Cancelar</Typography></Button>
                     <Button variant="main" size="large" onClick={deleteUser}><Typography variant="body-M-regular">Deletar</Typography></Button>

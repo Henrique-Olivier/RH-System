@@ -66,7 +66,7 @@ export default function useCarrer() {
         } else {
             setIsAdmin(false);
         }
-    }, [salaryList])
+    }, [userAccess])
 
     useEffect(() => {
         if(verifyIfIsLogged ()){

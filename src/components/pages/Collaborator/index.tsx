@@ -68,7 +68,7 @@ export default function Collaborator() {
     } else {
       setIsAdmin(false);
     }
-  }, [collaboratorList])
+  }, [userAccess])
   
   useEffect(() => {
     if (isValidCep(cep)) {
