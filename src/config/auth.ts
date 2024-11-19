@@ -16,5 +16,8 @@ export async function loggout() {
 
     let { error } = await supabase.auth.signOut()
     
+    if(error ) {
+        console.error(error)
+    }
     window.location.href = './'
 } 

@@ -1,8 +1,8 @@
-import { useNavigate } from "react-router-dom";
 import { NotificationType } from "../../notfication/types";
 import { classButton, classNotification, notification, textButton } from "./type";
 import { supabase } from "../../../config/supabase";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function validateName(name: string) {
     return name.length > 2;
@@ -44,7 +44,7 @@ export default function useRegister() {
     const [buttonClass, setButtonClass] = useState<classButton>(undefined);
     const [buttonText, setButtonText] = useState<textButton>("Cadastrar");
 
-
+    const navigate = useNavigate()
 
     async function registerUser(name: string, email: string, password: string) {
         const url = import.meta.env.VITE_SUPABASE_URL;
