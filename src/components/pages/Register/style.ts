@@ -7,6 +7,8 @@ export const Container = styled.div`
     align-items: center;
     justify-content: center;
     margin: 15px 0;
+    width: 100vw;
+    height: 95vh;
 
     .alert{
         transition: bottom .5s;
@@ -38,7 +40,8 @@ export const Container = styled.div`
 
 export const WrapperForm = styled.div`
     background-color: ${theme.grayscale.bgLightGrey};
-    border-radius: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 
     h2{
         text-align: center;
