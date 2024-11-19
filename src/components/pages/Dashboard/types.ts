@@ -1,9 +1,9 @@
 export type selectType = "region" | "salary";
 
-export interface payload<T>{
+export interface payload{
     qtd: number,
     name: string,
-    value: T
+    value: number
 }
 
 export interface collaborator {
@@ -25,7 +25,7 @@ export interface carrers {
     salario: number
 }
 
-export interface propsGraph {
+export interface propsGraph{
     cx: number,
     cy: number,
     midAngle: number,
@@ -34,7 +34,7 @@ export interface propsGraph {
     startAngle: number,
     endAngle: number,
     fill: string,
-    payload: payload<string | number>,
+    payload: payload,
     percent: number,
     value: number,
 }

@@ -58,8 +58,14 @@ export default function useCarrer() {
     const url = import.meta.env.VITE_SUPABASE_URL;
     const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+    useEffect(() => {
+        if(verifyIfIsLogged ()){
+            return
+        }
+        window.location.href = '../'
+    },[])
+    
     const userAccess = useVerifyAccess();
-
     useEffect(() => {
         if(userAccess == "1") {
             setIsAdmin(true);
@@ -68,12 +74,6 @@ export default function useCarrer() {
         }
     }, [userAccess])
 
-    useEffect(() => {
-        if(verifyIfIsLogged ()){
-            return
-        }
-        window.location.href = '../'
-    },[])
 
     useEffect(() => {
         async function getSalaryData() {
