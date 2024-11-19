@@ -159,7 +159,7 @@ export default function Users() {
         } else {
             setIsAdmin(false);
         }
-    }, [usersList])
+    }, [userAccess])
 
     useEffect(() => {
         getUserPermission()
