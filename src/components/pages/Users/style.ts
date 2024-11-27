@@ -16,6 +16,11 @@ export const UserCard = styled.div`
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   background: ${theme.grayscale.bgLightGrey};
   padding: 20px;
+
+  >div.title{
+    display: flex;
+    justify-content: space-between;
+  }
 `
 
  export const Table = styled.div`
@@ -61,7 +66,6 @@ th, td {
 }
 
 th {
-  background-color: ;
   font-weight: bold;
 }
 

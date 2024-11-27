@@ -28,10 +28,14 @@ export default function Users() {
     const [permissionList, setPermissionList] = useState<Permission[]>()
     const [isModalEditVisible, setIsModalVisible] = useState(false)
     const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false)
+    const [isModalAddVisible, setIsModalAddVisible] = useState(false)
     const [selectedUserId, setSelectedUserId] = useState("")
     const [email, setEmail] = useState("")
     const [nome, setNome] = useState("")
     const [cargo, setCargo] = useState(0)
+
+    const [inputEmail, setInputEmail] = useState("");
+    const [inputEmailError, setInputEmailError] = useState("");
 
     const [notificationDescribe, setNotificationDescribe] = useState("");
     const [notificationHeader, setNotificationHeader] = useState("");
@@ -193,6 +197,7 @@ export default function Users() {
 
     function closeModal() {
         setIsModalVisible(false)
+        setIsModalAddVisible(false)
         setNome("")
         setCargo(0)
         setEmail("")
@@ -299,6 +304,32 @@ export default function Users() {
             showNotification('Não foi possivel deletar, tente novamente mais tarde.', 'Erro ao deletar', 'error', 4500)
         }
     }
+    
+    function validateEmail(email: string) {
+        // Expressão regular para validar o e-mail
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+        // Testa o e-mail com a regex
+        return regex.test(email);
+    }
+
+    async function addUser() {
+        const isEmailValid = validateEmail(inputEmail);
+
+        if(isEmailValid) {
+            const { error } = await supabase.auth.admin.inviteUserByEmail(inputEmail, {
+                redirectTo: "./completeregister"
+            });
+            
+            if(error) {
+                console.error('Erro ao atualizar o usuário:', error);
+            } else {
+                showNotification('Usuário convidado com sucesso.', 'Sucesso', 'success')
+            }
+        } else {
+            setInputEmailError("Digite um email verdadeiro!")
+        }
+    }
 
     function showNotification(
         describe: string,
@@ -313,6 +344,11 @@ export default function Users() {
         setNotificationIsVisible(true);
         setTimeout(() => setNotificationIsVisible(false), time);
     }
+
+    function openAddModal(){
+        setIsModalAddVisible(true);
+    }
+
     return (
         <Body>
             <NotificationDiv $isVisible={notificationIsVisible}>
@@ -342,8 +378,21 @@ export default function Users() {
                     <Button variant="main" size="large" onClick={deleteUser}><Typography variant="body-M-regular">Deletar</Typography></Button>
                 </BtnDiv>
             </Modal>
+
+            <Modal isVisible={isModalAddVisible} onClose={() => setIsModalAddVisible(false)}>
+                <Typography variant="body-M-regular">Convidar novo usuario</Typography>
+                <Input height="default" textLabel="Digite o e-mail:" textError={inputEmailError} placeholder="Ex: teste@gmail.com" value={inputEmail} onChange={e => setInputEmail(e.target.value)}/>
+
+                <BtnDiv>
+                    <Button variant="secondary" size="large" onClick={closeModal}><Typography variant="body-M-regular">Cancelar</Typography></Button>
+                    <Button variant="main" size="large" onClick={addUser}><Typography variant="body-M-regular">Convidar</Typography></Button>
+                </BtnDiv>
+            </Modal>
             <UserCard>
-                <Typography variant="H2">Usuários do Sistema</Typography>
+                <div className="title">
+                    <Typography variant="H2">Usuários do Sistema</Typography>
+                    <Button size="large" variant="main" onClick={openAddModal}><Typography variant="body-M-regular">Adicionar</Typography></Button>
+                </div>
 
                 <Table>
                     <table>

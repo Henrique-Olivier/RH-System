@@ -92,7 +92,7 @@ export default function Login() {
     navigate('./signup')
   }
   function goToReset () {
-    navigate('./resetpassword')
+    navigate('./sendmail')
   }
 
   return (

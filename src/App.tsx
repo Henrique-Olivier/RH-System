@@ -8,6 +8,7 @@ import Dashboard from "./components/pages/Dashboard";
 import SendMail from "./components/pages/SendMail";
 import Reset from "./components/pages/Reset";
 import Users from "./components/pages/Users";
+import CompleteRegister from "./components/pages/CompleteRegister";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
      <Route path="/sendmail" element={<SendMail />}></Route>
      <Route path="/resetpassword" element={<Reset />}></Route>
      <Route path="/users" element={<Users />}></Route>
+     <Route path="/completeregister" element={<CompleteRegister />}></Route>
     </Routes>
   );
 }
