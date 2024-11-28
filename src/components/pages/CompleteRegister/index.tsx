@@ -7,6 +7,7 @@ import Input from "../../Input";
 import Button from "../../Button";
 import Select from "../../Select";
 import { supabase } from "../../../config/supabase";
+import { useNavigate } from "react-router-dom";
 
 function validateName(name: string) {
     return name.length > 2;
@@ -35,6 +36,8 @@ export default function CompleteRegister() {
     const [errorPassword, setErrorPassword] = useState("");
     const [errorPasswordConfirm, setErrorPasswordConfirm] = useState("");
 
+    const navigate = useNavigate();
+
     async function sendInfosUser() {
         const nameIsValid = validateName(valueInputName);
         const passwordIsValid = validatePassword(valueInputPassword);
@@ -59,7 +62,7 @@ export default function CompleteRegister() {
         }
 
         if(nameIsValid && passwordIsValid && samePasswordIsValid) {
-            const { error } = await supabase.auth.updateUser({
+            const { data, error } = await supabase.auth.updateUser({
                 password: valueInputPassword,
                 data: {
                     name: valueInputName
@@ -67,9 +70,15 @@ export default function CompleteRegister() {
             });
 
             if (error) {
-                showNotification( error.message, "Erro ao redefiniar a senha", "error", 4500)
+                showNotification( error.message, "Erro ao completar cadastro do usuario", "error", 4500)
             } else {
-                showNotification("Senha redefinida.", "Sucesso!" ,"success")
+
+                await supabase
+                    .from('permissoesDoUsuario')
+                    .insert({ userId: data.user?.id, permissao: 2 })
+
+
+                showNotification("Cadastro completo.", "Sucesso!" ,"success")
                 setTimeout(() => {navigate('/')}, 3000)
                 setDisableButton(true)
             }
@@ -133,7 +142,7 @@ export default function CompleteRegister() {
                     placeholder="Ex: 123456"
                 />
                 <Select height="default" disabled textLabel="Nivel de acesso:">
-                    <option value="collab">Colaborador</option>
+                    <option value="collab">Editor</option>
                 </Select>
                 <Button variant="main" size="large" disabled={disableButton} onClick={sendInfosUser}><Typography variant="body-M-regular">Enviar</Typography></Button>
             </InputContainer>

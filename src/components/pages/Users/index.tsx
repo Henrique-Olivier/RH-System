@@ -106,7 +106,6 @@ export default function Users() {
             }
 
             const data = await res.json();
-
             const permissions = data.map((permission: { userId: any; permissao: any }) => {
                 const item: UserPermission = {
                     userId: permission.userId,
@@ -153,7 +152,6 @@ export default function Users() {
 
         if (usersList && userPermissionList) {
             return usersList.map(user => {
-
                 const permission = userPermissionList.find(item => item.userId == user.id)
                 return (
                     <tr key={user.id} data-id={user.id}>
@@ -201,6 +199,7 @@ export default function Users() {
         setNome("")
         setCargo(0)
         setEmail("")
+        setInputEmail("")
     }
 
     function openModal() {
@@ -297,6 +296,7 @@ export default function Users() {
             } else {
                 console.log('Usuario deletado com sucesso:', data);
                 showNotification('Usuário deletado com sucesso.', 'Sucesso', 'success')
+                setTimeout(() => setIsModalDeleteVisible(false),3000)
             }
 
         } catch (error) {
@@ -318,7 +318,7 @@ export default function Users() {
 
         if(isEmailValid) {
             const { error } = await supabase.auth.admin.inviteUserByEmail(inputEmail, {
-                redirectTo: "./completeregister"
+                redirectTo: "http://localhost:5173/completeregister"
             });
             
             if(error) {
