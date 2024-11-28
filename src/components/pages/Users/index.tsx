@@ -8,20 +8,12 @@ import Input from "../../Input"
 import Select from "../../Select"
 import { NotificationType } from "../../notfication/types"
 import Notification from "../../notfication"
-import Conditional from "../../Conditional"
-import useVerifyAccess from "../../../hooks/useVerifyAccess"
 import { verifyIfIsLogged } from "../../../config/auth"
 import {Body,BtnDiv,ModalContent,NotificationDiv,Table, UserCard} from './style'
 import {IUser,Permission,UserPermission} from './types'
+import useVerifyAccess from "../../../hooks/useVerifyAccess"
 
 export default function Users() {
-
-    useEffect(() => {
-        if (verifyIfIsLogged()) {
-          return
-        }
-        window.location.href = '../'
-      }, [])
 
     const [usersList, setUserList] = useState<IUser[]>()
     const [userPermissionList, setuserPermissionList] = useState<UserPermission[]>()
@@ -41,27 +33,33 @@ export default function Users() {
     const [notificationHeader, setNotificationHeader] = useState("");
     const [notificationType, setNotificationType] = useState<NotificationType>("inform");
     const [notificationIsVisible, setNotificationIsVisible] = useState(false);
-
-    const [isAdmin, setIsAdmin] = useState<boolean>();
-
+    
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const apikey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
+    
     const userAccess = useVerifyAccess();
     
-    useEffect(() => {
-        if(userAccess == "1") {
-            setIsAdmin(true);
-        } else {
-            setIsAdmin(false);
-        }
-    }, [userAccess])
-
     useEffect(() => {
         getUserPermission()
         getUsers()
         getPermission()
     }, [notificationIsVisible])
+
+    useEffect(() => {
+        if (verifyIfIsLogged()) {
+            console.log(userAccess);
+          return
+        }
+        window.location.href = '../'
+    }, [])
+
+    useEffect(() => {
+        if(userAccess == "1" || userAccess === "") {
+            return;
+        }
+
+        window.location.href = './dashboard'
+    }, [userAccess])
 
     async function getUsers(): Promise<IUser[] | undefined> {
         try {
@@ -159,32 +157,30 @@ export default function Users() {
                         <th><Typography variant="body-S">{user.name || 'Indisponivel'}</Typography></th>
                         <th><Typography variant="body-S">{permission?.permission == 1 ? 'Admin' : permission?.permission == 2 ? 'Editor' : 'Indisponivel'}</Typography></th>
                         
-                        <Conditional condition={isAdmin!}>
-                            <th>
-                                <Button variant='text' onClick={(event) => {
-                                    const target = event.target as HTMLElement;
-                                    const row = target.parentElement?.parentElement?.parentElement;
-                                    if (row) {
-                                        const userId = row.dataset.id!
-                                        openEditModal(userId)
-                                    }
-                                }} size="large">
-                                    <Typography variant="body-S">Editar</Typography>
-                                </Button>
-                            </th>
-                            <th>
-                                <Button variant='text' onClick={(event) => {
-                                    const target = event.target as HTMLElement;
-                                    const row = target.parentElement?.parentElement?.parentElement;
-                                    if (row) {
-                                        const userId = row.dataset.id!
-                                        openDeleteModal(userId)
-                                    }
-                                }} size="large">
-                                    <Typography variant="body-S">Excluir</Typography>
-                                </Button>
-                            </th>
-                        </Conditional>
+                        <th>
+                            <Button variant='text' onClick={(event) => {
+                                const target = event.target as HTMLElement;
+                                const row = target.parentElement?.parentElement?.parentElement;
+                                if (row) {
+                                    const userId = row.dataset.id!
+                                    openEditModal(userId)
+                                }
+                            }} size="large">
+                                <Typography variant="body-S">Editar</Typography>
+                            </Button>
+                        </th>
+                        <th>
+                            <Button variant='text' onClick={(event) => {
+                                const target = event.target as HTMLElement;
+                                const row = target.parentElement?.parentElement?.parentElement;
+                                if (row) {
+                                    const userId = row.dataset.id!
+                                    openDeleteModal(userId)
+                                }
+                            }} size="large">
+                                <Typography variant="body-S">Excluir</Typography>
+                            </Button>
+                        </th>
 
                     </tr >
                 )

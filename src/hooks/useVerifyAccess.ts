@@ -6,7 +6,7 @@ export default function useVerifyAccess() {
     
     const url = import.meta.env.VITE_SUPABASE_URL;
     const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    
+
     useEffect(() => {
         const itemLocalStorage = localStorage.getItem("sb-tmmwpgaetgpasojuiyct-auth-token")!;
         const itemLocalStorageConverted = JSON.parse(itemLocalStorage);
