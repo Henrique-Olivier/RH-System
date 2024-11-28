@@ -169,3 +169,6 @@ display: flex;
 flex-direction: column;
 gap: 25px;
 `
+
+export const HiddenInputs = styled.div`
+display: none;`
