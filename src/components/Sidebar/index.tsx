@@ -9,7 +9,7 @@ import Typography from "../Typography"
 import Button from "../Button"
 import { useNavigate } from "react-router-dom"
 import {CloseBtn,MenuImg,Overlay,SidebarContainer,SidebarContent } from './style'
-import { loggout } from '../../config/auth'
+import { loggout } from '../../service/utils'
 
 export default function Sidebar() {
     const [isVisible, setIsVisible] = useState(false)
