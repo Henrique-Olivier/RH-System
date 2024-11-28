@@ -25,7 +25,6 @@ import {
 } from "../../interface/collaborator.interface";
 import { verifyIfIsLogged } from "../../config/auth";
 import SelectDesgin from "../../components/Select";
-import { collaborator } from "../Dashboard/types";
 import Empty from "../../components/Empty";
 import iconEmpty from "../../components/assets/Empty.svg";
 import useVerifyAccess from "../../hooks/useVerifyAccess";
@@ -563,11 +562,11 @@ export default function Collaborator() {
   }
 
   function filter(
-    collaborators: collaborator[],
+    collaborators: CollaboratorType[],
     name: string,
     cargoId: number,
     salario: string
-  ): collaborator[] {
+  ): CollaboratorType[] {
     let filteredCollabs = collaborators;
 
     const nameToSearch = stringNormalizer(name);
