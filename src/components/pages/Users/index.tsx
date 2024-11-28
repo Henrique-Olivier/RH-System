@@ -12,6 +12,7 @@ import { verifyIfIsLogged } from "../../../config/auth"
 import {Body,BtnDiv,ModalContent,NotificationDiv,Table, UserCard} from './style'
 import {IUser,Permission,UserPermission} from './types'
 import useVerifyAccess from "../../../hooks/useVerifyAccess"
+import { useNavigate } from "react-router-dom"
 
 export default function Users() {
 
@@ -25,6 +26,7 @@ export default function Users() {
     const [email, setEmail] = useState("")
     const [nome, setNome] = useState("")
     const [cargo, setCargo] = useState(0)
+    const [senha, setSenha] = useState("");
 
     const [inputEmail, setInputEmail] = useState("");
     const [inputEmailError, setInputEmailError] = useState("");
@@ -36,6 +38,8 @@ export default function Users() {
     
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const apikey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+    const navigate = useNavigate();
     
     const userAccess = useVerifyAccess();
     
@@ -345,6 +349,10 @@ export default function Users() {
         setIsModalAddVisible(true);
     }
 
+    function goToReset() {
+        navigate("/sendmail")
+    }
+
     return (
         <Body>
             <NotificationDiv $isVisible={notificationIsVisible}>
@@ -360,6 +368,11 @@ export default function Users() {
                         <option value="0">Selecione uma opção</option>
                         {showPermissionsOptions()}
                     </Select>
+
+                    <div>
+                        <Button size="large" variant="link" onClick={goToReset}>Recuperar senha</Button>
+                    </div>
+                    
                     <BtnDiv>
                         <Button variant="secondary" size="large" onClick={closeModal}><Typography variant="body-M-regular">Cancelar</Typography></Button>
                         <Button variant="main" size="large" onClick={editUser}><Typography variant="body-M-regular">Editar</Typography></Button>
