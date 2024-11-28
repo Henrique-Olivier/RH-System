@@ -19,5 +19,6 @@ export async function loggout() {
     if(error ) {
         console.error(error)
     }
+    
     window.location.href = './'
 } 
