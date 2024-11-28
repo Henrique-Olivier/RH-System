@@ -18,6 +18,7 @@ import {
   NotificationDiv,
   Select,
   Table,
+  HiddenInputs
 } from "./style";
 import {
   CollaboratorType,
@@ -71,6 +72,7 @@ export default function Collaborator() {
   const [inputSalario, setInputSalario] = useState("0");
   const [showEmpty, setShowEmpty] = useState(false);
   const [btnDisable, setBtnDisable] = useState(true);
+  const [showAdress, setShowAdress] = useState(false)
 
   const [isAdmin, setIsAdmin] = useState<boolean>();
 
@@ -647,14 +649,21 @@ export default function Collaborator() {
     setInputSalario("0");
   }
 
+  useEffect(() => {
+    if(numero.length > 0) {
+      setShowAdress(true);
+    } else if (numero.length == 0){
+      setShowAdress(false)
+    } 
+  }, [numero])
+
   return (
     <>
       <Sidebar></Sidebar>
       <Container>
         <Modal isVisible={modalConfirmVisible} onClose={closeModalConfirm}>
-          <Typography variant="body-M-regular">{`Certeza que deseja remover o coloaborador ${
-            getCollabName(idToEdit) || ""
-          } ? `}</Typography>
+          <Typography variant="body-M-regular">{`Certeza que deseja remover o coloaborador ${getCollabName(idToEdit) || ""
+            } ? `}</Typography>
           <DivButtons>
             <Button
               size="large"
@@ -700,30 +709,38 @@ export default function Collaborator() {
             <Input
               height="small"
               value={numero}
+              disabled={!cepInputsDisable}
               onChange={(e) => setNumero(e.target.value)}
               textLabel={<Typography variant="body-XS">Número</Typography>}
             ></Input>
-            <Input
-              height="small"
-              value={logradouro}
-              disabled={cepInputsDisable}
-              onChange={(e) => setLogradouro(e.target.value)}
-              textLabel={<Typography variant="body-XS">Logradouro</Typography>}
-            ></Input>
-            <Input
-              height="small"
-              value={cidade}
-              disabled={cepInputsDisable}
-              onChange={(e) => setCidade(e.target.value)}
-              textLabel={<Typography variant="body-XS">Cidade</Typography>}
-            ></Input>
-            <Input
-              height="small"
-              value={estado}
-              disabled={cepInputsDisable}
-              onChange={(e) => setEstado(e.target.value)}
-              textLabel={<Typography variant="body-XS">Estado</Typography>}
-            ></Input>
+
+            <DivEmpty $showEmpty={showAdress}>
+              <Typography variant="body-M-regular">{`Endereço: ${logradouro}, ${numero} - ${cidade} - ${estado}`}</Typography>
+            </DivEmpty >
+
+            <HiddenInputs>
+              <Input
+                height="small"
+                value={logradouro}
+                disabled={cepInputsDisable}
+                onChange={(e) => setLogradouro(e.target.value)}
+                textLabel={<Typography variant="body-XS">Logradouro</Typography>}
+              ></Input>
+              <Input
+                height="small"
+                value={cidade}
+                disabled={cepInputsDisable}
+                onChange={(e) => setCidade(e.target.value)}
+                textLabel={<Typography variant="body-XS">Cidade</Typography>}
+              ></Input>
+              <Input
+                height="small"
+                value={estado}
+                disabled={cepInputsDisable}
+                onChange={(e) => setEstado(e.target.value)}
+                textLabel={<Typography variant="body-XS">Estado</Typography>}
+              ></Input>
+            </HiddenInputs>
             <Select
               value={cargo}
               onChange={(e) => setCargo(Number(e.target.value))}
@@ -866,8 +883,8 @@ export default function Collaborator() {
               {filterCollabList
                 ? showCollaboratorsRows(filterCollabList)
                 : collaboratorList
-                ? showCollaboratorsRows(collaboratorList)
-                : ""}
+                  ? showCollaboratorsRows(collaboratorList)
+                  : ""}
             </tbody>
           </table>
 
