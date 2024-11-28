@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { supabase } from "../config/supabase";
 
 
 export function verifyIfIsLogged() {
@@ -14,7 +14,7 @@ export function verifyIfIsLogged() {
 
 export async function loggout() {
 
-    let { error } = await supabase.auth.signOut()
+    const { error } = await supabase.auth.signOut()
     
     if(error ) {
         console.error(error)

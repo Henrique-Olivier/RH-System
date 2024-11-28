@@ -7,7 +7,7 @@ import Notification from "../../components/notfication";
 import { NotificationType } from "../../components/notfication/types";
 import * as Styles from './styles'
 import {useNavigate } from "react-router-dom";
-import { verifyIfIsLogged } from "../../config/auth";
+import { verifyIfIsLogged } from "../../service/utils";
 
 
 export default function Login() {

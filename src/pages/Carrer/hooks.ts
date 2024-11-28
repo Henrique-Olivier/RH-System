@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { verifyIfIsLogged } from "../../config/auth";
+import { verifyIfIsLogged } from "../../service/utils";
 import { NotificationType } from "../../components/notfication/types";
 import { typeModal } from "./types";
 import useVerifyAccess from "../../hooks/useVerifyAccess";

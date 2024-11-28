@@ -23,7 +23,7 @@ import {
   CollaboratorType,
   PositionType,
 } from "../../interface/collaborator.interface";
-import { verifyIfIsLogged } from "../../config/auth";
+import { verifyIfIsLogged } from "../../service/utils";
 import SelectDesgin from "../../components/Select";
 import Empty from "../../components/Empty";
 import iconEmpty from "../../components/assets/Empty.svg";

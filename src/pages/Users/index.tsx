@@ -10,7 +10,7 @@ import { NotificationType } from "../../components/notfication/types";
 import Notification from "../../components/notfication";
 import Conditional from "../../components/Conditional";
 import useVerifyAccess from "../../hooks/useVerifyAccess";
-import { verifyIfIsLogged } from "../../config/auth";
+import { verifyIfIsLogged } from "../../service/utils";
 import {
   Body,
   BtnDiv,

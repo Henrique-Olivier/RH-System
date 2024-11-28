@@ -5,7 +5,7 @@ import { PieChart, Pie, Sector, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, 
 import {payload, propsGraph, selectType } from "./types";
 import { theme } from "../../components/colors/colorts";
 import Sidebar from "../../components/Sidebar";
-import { verifyIfIsLogged } from "../../config/auth";
+import { verifyIfIsLogged } from "../../service/utils";
 import { CollaboratorType, PositionType } from "../../interface/collaborator.interface";
 
 let textTooltip: string;
