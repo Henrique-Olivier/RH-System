@@ -7,7 +7,6 @@ import { NotificationType } from "../../components/notfication/types";
 import Notification from "../../components/notfication";
 import {Container,InputContainer,NotificationControlDiv} from './styles'
 
-
 export default function SendMail() {
 
     const [email, setEmail] = useState('');
