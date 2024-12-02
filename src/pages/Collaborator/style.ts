@@ -100,6 +100,7 @@ display: flex;
 flex-direction: column;
 align-items: start;
 gap: 25px;
+overflow-x: hidden;
 overflow-y: scroll;
 
   input{
