@@ -305,7 +305,7 @@ export default function Collaborator() {
       setCidade(collabToEdit.cidade);
       setEstado(collabToEdit.estado);
       setCargo(collabToEdit.idCargo);
-      setComplemento(collabToEdit.complemento)
+      setComplemento(collabToEdit.complemento || '')
       setModalFunction("edit");
       openModal();
     }
