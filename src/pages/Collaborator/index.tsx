@@ -16,7 +16,6 @@ import {
   FunctionsBox,
   InputContainer,
   NotificationDiv,
-  Select,
   Table,
   HiddenInputs
 } from "./style";
