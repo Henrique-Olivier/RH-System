@@ -21,7 +21,7 @@ export const Container = styled.div`
   z-index: 9999;
   box-sizing: border-box;
   background-color: ${theme.grayscale.white};
-  width: 700px;
+  width: 800px;
   height: fit-content;
   padding: 16px;
   border-radius: 8px;

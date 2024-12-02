@@ -15,6 +15,7 @@ export interface CollaboratorType {
   cidade: string;
   estado: string;
   idCargo: number;
+  complemento: string;
 }
 
 export interface UserPermission {

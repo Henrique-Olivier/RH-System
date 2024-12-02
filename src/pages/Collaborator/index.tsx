@@ -16,7 +16,6 @@ import {
   FunctionsBox,
   InputContainer,
   NotificationDiv,
-  Select,
   Table,
   HiddenInputs
 } from "./style";
@@ -56,6 +55,7 @@ export default function Collaborator() {
   const [cargo, setCargo] = useState(0);
   const [nivel, setNivel] = useState("");
   const [salario, setSalario] = useState(0);
+  const [complemento, setComplemento] = useState('');
   const [postionInputsDisable, setPositionInputsDisable] = useState(false);
   const [cepInputsDisable, setCepInputsDisable] = useState(false);
   const [numero, setNumero] = useState("");
@@ -305,6 +305,7 @@ export default function Collaborator() {
       setCidade(collabToEdit.cidade);
       setEstado(collabToEdit.estado);
       setCargo(collabToEdit.idCargo);
+      setComplemento(collabToEdit.complemento || '')
       setModalFunction("edit");
       openModal();
     }
@@ -511,6 +512,7 @@ export default function Collaborator() {
           cidade,
           estado,
           idCargo: cargo,
+          complemento
         }),
       });
 
@@ -713,9 +715,16 @@ export default function Collaborator() {
               onChange={(e) => setNumero(e.target.value)}
               textLabel={<Typography variant="body-XS">Número</Typography>}
             ></Input>
+            <Input
+              height="small"
+              value={complemento}
+              disabled={!cepInputsDisable}
+              onChange={(e) => setComplemento(e.target.value)}
+              textLabel={<Typography variant="body-XS">Complemento</Typography>}
+            ></Input>
 
             <DivEmpty $showEmpty={showAdress}>
-              <Typography variant="body-M-regular">{`Endereço: ${logradouro}, ${numero} - ${cidade} - ${estado}`}</Typography>
+              <Typography variant="body-M-regular">{`Endereço: ${logradouro}, ${numero} - ${cidade} - ${estado}. ${complemento}`}</Typography>
             </DivEmpty >
 
             <HiddenInputs>
@@ -741,7 +750,9 @@ export default function Collaborator() {
                 textLabel={<Typography variant="body-XS">Estado</Typography>}
               ></Input>
             </HiddenInputs>
-            <Select
+            <SelectDesgin
+            height="small"
+            
               value={cargo}
               onChange={(e) => setCargo(Number(e.target.value))}
             >
@@ -749,7 +760,7 @@ export default function Collaborator() {
                 <Typography variant="body-XS">Selecione Um Cargo</Typography>
               </option>
               {cargos && showPositionOptions(cargos)}
-            </Select>
+            </SelectDesgin>
             <Input
               height="small"
               value={nivel}
