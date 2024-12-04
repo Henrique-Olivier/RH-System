@@ -9,6 +9,7 @@ import SendMail from "./pages/SendMail";
 import Reset from "./pages/Reset";
 import Users from "./pages/Users";
 import CompleteRegister from "./pages/CompleteRegister";
+import JobVacancies from "./pages/JobVacancies";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <Route path="/resetpassword" element={<Reset />}></Route>
       <Route path="/users" element={<Users />}></Route>
       <Route path="/completeregister" element={<CompleteRegister />}></Route>
+      <Route path="/jobvacancies" element={< JobVacancies/>}></Route>
     </Routes>
   );
 }
