@@ -1,6 +1,7 @@
 import { supabase } from "../config/supabase";
 import {
   CollaboratorType,
+  ICandidate,
   IUser,
   Permission,
   PositionType,
@@ -92,4 +93,29 @@ export async function getUsers(): Promise<IUser[] | null> {
   }
 }
 
+export async function getCandidates() {
+  try {
+    const { data, error } = await supabase.from("Candidato").select();
 
+    if (error) {
+      console.error("Erro ao buscar usuários:", error);
+    }
+
+    if(data) {
+      const candidates: ICandidate[] = data.map(candidate => {
+        return {
+          id: candidate.id,
+          name: candidate.nome,
+          email: candidate.email,
+          idVaga: candidate.fkVaga
+        }
+      });
+
+      return candidates;
+    }
+    
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
