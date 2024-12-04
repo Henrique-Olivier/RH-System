@@ -106,14 +106,31 @@ export async function getCandidates() {
         return {
           id: candidate.id,
           name: candidate.nome,
-          email: candidate.email,
-          idVaga: candidate.fkVaga
+          email: candidate.email
         }
       });
 
       return candidates;
     }
     
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function getJobsApplied(idCandidate: string){
+  try {
+    const { data, error } = await supabase.from("vagaAplicada").select("fkVaga").eq("fkCandidato", idCandidate);
+
+    if(data) {
+      console.log(data);
+    }
+    
+    if (error) {
+      console.error("Erro ao buscar usuários:", error);
+    }
+
   } catch (error) {
     console.error(error);
     return null;

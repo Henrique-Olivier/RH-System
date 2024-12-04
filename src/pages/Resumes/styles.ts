@@ -8,15 +8,6 @@ export const BodyContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-`;
-
-export const ListingContainer = styled.div`
-    width: 100%;
-    max-width: 780px;
-    background-color: ${theme.grayscale.bgLightGrey};
-    border-radius: 10px;
-    padding: 10px 15px;
-    box-shadow: 0px 0px 20px 0px ${theme.grayscale.spacer};
 
     table{
         border-collapse: collapse;
@@ -28,4 +19,26 @@ export const ListingContainer = styled.div`
         text-align: start;
         padding: 10px 5px;
     }
+
+    td.action-btn{
+        display: flex;
+        justify-content: center;
+
+        button{
+            margin-left: 10px;
+        }
+    }
+
+    div.vacancy{
+        width: 100%;
+    }
+`;
+
+export const ListingContainer = styled.div`
+    width: 100%;
+    max-width: 780px;
+    background-color: ${theme.grayscale.bgLightGrey};
+    border-radius: 10px;
+    padding: 10px 15px;
+    box-shadow: 0px 0px 20px 0px ${theme.grayscale.spacer};
 `;
