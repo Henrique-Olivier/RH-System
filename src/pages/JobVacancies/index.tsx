@@ -11,6 +11,8 @@ import Select from "../../components/Select";
 import { PositionType } from "../../interface/collaborator.interface";
 import { getPositions } from "../../service/requisitions";
 import { supabase } from "../../config/supabase";
+import Notification from "../../components/notfication";
+import { NotificationType } from "../../components/notfication/types";
 
 const Container = styled.div`
 height: 100vh;
@@ -87,6 +89,14 @@ display: flex;
 gap: 15px;
 justify-content: center;
 `
+const NotificationDiv = styled.div<{ $isVisible: boolean }>`
+  position: absolute;
+  top: ${props => props.$isVisible ? '10%' : '-100%'};
+  left: 50%;
+  transform: translate(-50%,-50%);
+  transition: all 0.4s;
+  z-index: 9999;
+`
 interface VacancieType {
     id: number;
     titulo: string;
@@ -114,6 +124,13 @@ export default function JobVacancies() {
     const [isEditModal, setIsEditModal] = useState(false)
     const [idToEdit, setIdToEdit] = useState(0)
 
+    const [notificationDescribe, setNotificationDescribe] = useState("");
+    const [notificationHeader, setNotificationHeader] = useState("");
+    const [notificationType, setNotificationType] =
+        useState<NotificationType>("inform");
+    const [notificationIsVisible, setNotificationIsVisible] = useState(false);
+
+    const [isModalConfirmVisible, setIsModalConfirmVisible] = useState(false)
 
     useEffect(() => {
         const fetchPositions = async () => {
@@ -126,7 +143,12 @@ export default function JobVacancies() {
 
 
         fetchPositions();
-    }, []);
+    }, [notificationIsVisible]);
+
+    useEffect(() => {
+        getJobVacancie()
+    }, [notificationIsVisible])
+
 
     function showPositionOptions(positions: PositionType[]) {
         return positions.map((position) => (
@@ -180,18 +202,25 @@ export default function JobVacancies() {
 
 
     async function addVacancie() {
+
+        if (!title || !description || !position || !benefits) {
+            showNotification('Preencha todos os campos antes de prosseguir.', 'Não foi possível adicionar a vaga', 'warning', 4500)
+        }
+
         try {
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('Vaga')
                 .insert([{ titulo: title, descricao: description, fkCargo: Number(position), beneficios: benefits },])
 
 
             if (error) {
                 console.error(error)
+                showNotification('Houve um erro ao adicionar a vaga, tente novamente mais tarde.', 'Erro ao adicionar vaga.', 'error', 4500)
                 return;
             }
 
-            console.log(data)
+            showNotification('A vaga foi adicionado com sucesso!', 'Vaga adicionada.', 'success')
+            setTimeout( closeModal, 1500)
         } catch (error) {
             console.error(error)
         }
@@ -227,9 +256,6 @@ export default function JobVacancies() {
         return text;
     }
 
-    useEffect(() => {
-        getJobVacancie()
-    }, [])
 
 
     function openVisualize(idVacancie: number) {
@@ -285,8 +311,104 @@ export default function JobVacancies() {
         }
     }
 
+    async function updateVacancie() {
+
+        try {
+            const { error } = await supabase
+                .from('Vaga')
+                .update({ titulo: title, descricao: description, fkCargo: Number(position), beneficios: benefits })
+                .eq('id', idToEdit)
+
+
+            if (error) {
+                console.log(error)
+                showNotification('Houve um erro ao editar a vaga, tente novamente mais tarde.', 'Erro ao excluir vaga.', 'error', 4500)
+                return
+            }
+
+            showNotification('Vaga editada com sucesso!', 'Vaga Editada.', 'success', 4500)
+            setTimeout(() => closeModal(), 1000)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    function showNotification(
+        describe: string,
+        header: string,
+        type: NotificationType,
+        time: number = 3000
+    ) {
+        setNotificationType(type);
+        setNotificationHeader(header);
+        setNotificationDescribe(describe);
+
+        setNotificationIsVisible(true);
+        setTimeout(() => setNotificationIsVisible(false), time);
+    }
+
+    async function deleteVacancie() {
+        const { error } = await supabase
+            .from('Vaga')
+            .delete()
+            .eq('id', idToEdit)
+
+        if (error) {
+            console.error(error)
+            showNotification('Houve um erro ao excluir a vaga, tente novamente mais tarde.', 'Erro ao excluir vaga.', 'error', 4500)
+            return;
+        }
+
+
+        showNotification('A vaga foi excluida com sucesso!', 'Vaga Excluida.', 'success', 4500)
+        closeModalConfirm()
+    }
+
+    function openModalConfirm() {
+        closeVisualize()
+        setIsModalConfirmVisible(true)
+    }
+
+    function closeModalConfirm() {
+        setIsModalConfirmVisible(false)
+    }
+
+    function searchVacancieName(idVacancie: number): string {
+
+        if (vacanciesList) {
+            const vacancie = vacanciesList.find(vacancie => (vacancie.id == idVacancie))
+
+            if (vacancie) {
+                return vacancie.titulo;
+            }
+        }
+
+        return '';
+    }
+
     return (
         <>
+            <Modal isVisible={isModalConfirmVisible} onClose={closeModalConfirm}>
+                <Typography variant="body-L">{`Você deseja excluir a vaga "${idToEdit && searchVacancieName(idToEdit)}"`}</Typography>
+
+                <ModalButtons>
+                    <Button variant="secondary" size="large" onClick={closeModalConfirm}>
+                        <Typography variant="body-M">Cancelar</Typography>
+                    </Button>
+                    <Button variant="main" size="large" onClick={deleteVacancie}>
+                        <Typography variant="body-M">Confirmar</Typography>
+                    </Button>
+                </ModalButtons>
+            </Modal>
+
+            <NotificationDiv $isVisible={notificationIsVisible}>
+                <Notification
+                    type={notificationType}
+                    model="informer"
+                    describe={notificationDescribe}
+                    header={notificationHeader}
+                />
+            </NotificationDiv>
             <Modal isVisible={modalVisualize} onClose={closeVisualize}>
                 <ModalCotent>
                     <Typography variant="body-L">Título:</Typography>
@@ -298,7 +420,7 @@ export default function JobVacancies() {
                     <Typography variant="body-L">Benefícios:</Typography>
                     <Typography variant="body-M">{`${visualizeBenefits}`}</Typography>
                     <ModalButtons>
-                        <Button variant="secondary" size="large">
+                        <Button variant="secondary" size="large" onClick={openModalConfirm}>
                             <Typography variant="body-M">Excluir</Typography>
                         </Button>
                         <Button variant="main" onClick={() => openEditModal(idToEdit)} size="large">
@@ -323,7 +445,7 @@ export default function JobVacancies() {
                             <Typography variant="body-M">Cancelar</Typography>
                         </Button>
                         {isEditModal ?
-                            <Button variant="main" size="large">
+                            <Button variant="main" size="large" onClick={updateVacancie}>
                                 <Typography variant="body-M">Editar</Typography>
                             </Button>
                             :
