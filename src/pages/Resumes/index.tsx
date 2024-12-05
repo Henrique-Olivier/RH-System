@@ -1,5 +1,6 @@
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
+import Sidebar from "../../components/Sidebar";
 import Typography from "../../components/Typography";
 import useResumes from "./hook";
 import { BodyContainer, ListingContainer } from "./styles";
@@ -14,8 +15,8 @@ export default function Resumes() {
                     <tr key={`${jobs.id}`}>
                         <td><Typography variant="body-XS">{`${jobs.titulo}`}</Typography></td>
                         <td className="action-btn">
-                            <Button size="medium" variant="main">Aprovar</Button>
-                            <Button size="medium" variant="secondary">Reprovar</Button>
+                            <Button size="medium" variant="main" disabled={modal.buttonsDisabled} onClick={modal.handleApproved}>Aprovar</Button>
+                            <Button id={`${jobs.id}`} size="medium" variant="secondary" disabled={modal.buttonsDisabled} onClick={modal.handleDisapproved}>Reprovar</Button>
                         </td>
                     </tr>
                 )
@@ -38,46 +39,42 @@ export default function Resumes() {
     }
 
     return(
-        <BodyContainer>
-            <Modal isVisible={modal.visibility} onClose={() => modal.handleVisibility()}>
-                <Typography variant="body-L">Vagas Aplicadas</Typography>
+        <>
+            <Sidebar></Sidebar>
+            <BodyContainer>
+                <Modal isVisible={modal.visibility} onClose={() => modal.handleVisibility()}>
+                    <Typography variant="body-L">Vagas Aplicadas</Typography>
 
-                <div className="vacancy">
+                    <div className="vacancy">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><Typography variant="body-S">Nome da vaga</Typography></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {showJobsApplied()}
+                            </tbody>
+                        </table>
+                    </div>
+                </Modal>
+                <ListingContainer>
+                    <div>
+                        <Typography variant="H4">Currículos</Typography>
+                    </div>
                     <table>
                         <thead>
                             <tr>
-                                <th><Typography variant="body-S">Nome da vaga</Typography></th>
+                                <th><Typography variant="body-S">Nome</Typography></th>
+                                <th><Typography variant="body-S">E-mail</Typography></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {/* <tr>
-                                <td><Typography variant="body-XS">Front-end</Typography></td>
-                                <td className="action-btn">
-                                    <Button size="medium" variant="main">Aprovar</Button>
-                                    <Button size="medium" variant="secondary">Reprovar</Button>
-                                </td>
-                            </tr> */}
-                            {showJobsApplied()}
+                            {showCandidates()}
                         </tbody>
                     </table>
-                </div>
-            </Modal>
-            <ListingContainer>
-                <div>
-                    <Typography variant="H4">Currículos</Typography>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th><Typography variant="body-S">Nome</Typography></th>
-                            <th><Typography variant="body-S">E-mail</Typography></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {showCandidates()}
-                    </tbody>
-                </table>
-            </ListingContainer>
-        </BodyContainer>
+                </ListingContainer>
+            </BodyContainer>
+        </>
     );
 }

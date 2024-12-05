@@ -5,6 +5,7 @@ import dashIcon from '../assets/dashIcon.png'
 import colabIcon from '../assets/collab.png'
 import careerIcon from '../assets/gravata.png'
 import userIcon from '../assets/informacao-pessoal.png'
+import curriculum from '../assets/cv.png';
 import Typography from "../Typography"
 import Button from "../Button"
 import { useNavigate } from "react-router-dom"
@@ -44,14 +45,18 @@ export default function Sidebar() {
     function gotoCareerPage () {
         navigate('/carrer')
     }
+
     function gotoDashboardPage () {
         navigate('/dashboard')
     }
+
     function gotoUserPage() {
         navigate('/users')
     }
 
-
+    function gotoResumePage() {
+        navigate('/resumes')
+    }
 
 
     return (
@@ -67,6 +72,9 @@ export default function Sidebar() {
                     <Button variant="text" size="large" icon={careerIcon} onClick={gotoCareerPage}><Typography variant="body-M-regular">Cargos</Typography></Button>
                     <Conditional condition={isAdmin!}>
                         <Button variant="text" size="large" icon={userIcon} onClick={gotoUserPage}><Typography variant="body-M-regular">Usuários</Typography></Button>
+                    </Conditional>
+                    <Conditional condition={isAdmin!}>
+                        <Button variant='text' size='large' icon={curriculum} onClick={gotoResumePage}><Typography variant='body-M-regular'>Candidatos</Typography></Button>
                     </Conditional>
                     <Button variant="text" size="large"  onClick={loggout}><Typography variant="body-M-regular">Logout</Typography></Button>
                 </SidebarContent>
