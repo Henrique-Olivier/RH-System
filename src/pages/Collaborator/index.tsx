@@ -56,9 +56,9 @@ export default function Collaborator() {
   const [nivel, setNivel] = useState("");
   const [salario, setSalario] = useState(0);
   const [complemento, setComplemento] = useState('');
+  const [numero, setNumero] = useState("");
   const [postionInputsDisable, setPositionInputsDisable] = useState(false);
   const [cepInputsDisable, setCepInputsDisable] = useState(false);
-  const [numero, setNumero] = useState("");
   const [cargos, setCargos] = useState<PositionType[]>();
   const [collaboratorList, setCollaboratorsList] =
     useState<CollaboratorType[]>();
