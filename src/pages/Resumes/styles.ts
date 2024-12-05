@@ -38,6 +38,10 @@ export const BodyContainer = styled.div`
         position: absolute;
         margin: 15px 0;
         z-index: 999;
+
+        img{
+            height: 70px;
+        }
     }
 
     .alert.close{

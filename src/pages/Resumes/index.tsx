@@ -43,8 +43,8 @@ export default function Resumes() {
         <>
             <Sidebar></Sidebar>
             <BodyContainer>
-                <Notification className={`alert ${notification.class}`} type={notification.type} header={notification.header} model="informer" describe={notification.describe} />
                 <Modal isVisible={modal.visibility} onClose={() => modal.handleVisibility()}>
+                    <Notification className={`alert ${notification.class}`} type={notification.type} header={notification.header} model="informer" describe={notification.describe} />
                     <Typography variant="body-L">Vagas Aplicadas</Typography>
 
                     <div className="vacancy">
