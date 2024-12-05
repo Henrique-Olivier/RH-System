@@ -24,7 +24,7 @@ function App() {
       <Route path="/resetpassword" element={<Reset />}></Route>
       <Route path="/users" element={<Users />}></Route>
       <Route path="/completeregister" element={<CompleteRegister />}></Route>
-      <Route path="/jobvacancies" element={< JobVacancies/>}></Route>
+      <Route path="/vancaciemanagment" element={< JobVacancies/>}></Route>
     </Routes>
   );
 }
