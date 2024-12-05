@@ -43,3 +43,8 @@ export interface ICandidate {
   name: string | undefined;
   email: string | undefined;
 }
+
+export interface IJob {
+  id: number;
+  titulo: string;
+}

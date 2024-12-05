@@ -5,7 +5,7 @@ import { ICandidate } from "../../interface/collaborator.interface";
 export default function useResumes() {
     const [listCandidates, setListCandidates] = useState<ICandidate[]>();
     const [visibilityModal, setVisibilityModal] = useState(false);
-    /* const [idCandidate, setIdCandidate] = useState(""); */
+    const [listJobsApplied, setListJobsApplied] = useState([]);
 
     useEffect(() => {
         async function getCandidatesSupabase() {
@@ -21,7 +21,10 @@ export default function useResumes() {
     async function handleVisibilityModal(event?: React.MouseEvent<HTMLButtonElement>) {
         if(event) {
             const idCandidate = event.currentTarget.id
-            await getJobsApplied(idCandidate);
+            const res = await getJobsApplied(idCandidate);
+            if(res) {
+                console.log(res)
+            }
         }
         setVisibilityModal(!visibilityModal);
     }
