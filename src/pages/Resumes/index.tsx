@@ -1,12 +1,13 @@
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
+import Notification from "../../components/notfication";
 import Sidebar from "../../components/Sidebar";
 import Typography from "../../components/Typography";
 import useResumes from "./hook";
 import { BodyContainer, ListingContainer } from "./styles";
 
 export default function Resumes() {
-    const { listCandidates, listJobsApplied, modal } = useResumes();
+    const { listCandidates, listJobsApplied, modal, notification } = useResumes();
 
     function showJobsApplied() {
         if(listJobsApplied) {
@@ -42,6 +43,7 @@ export default function Resumes() {
         <>
             <Sidebar></Sidebar>
             <BodyContainer>
+                <Notification className={`alert ${notification.class}`} type={notification.type} header={notification.header} model="informer" describe={notification.describe} />
                 <Modal isVisible={modal.visibility} onClose={() => modal.handleVisibility()}>
                     <Typography variant="body-L">Vagas Aplicadas</Typography>
 

@@ -32,6 +32,21 @@ export const BodyContainer = styled.div`
     div.vacancy{
         width: 100%;
     }
+
+    .alert{
+        transition: bottom .5s;
+        position: absolute;
+        margin: 15px 0;
+    }
+
+    .alert.close{
+        bottom: 100%;
+        z-index: 5;
+    }
+
+    .alert.open{
+        bottom: 80%;
+    }
 `;
 
 export const ListingContainer = styled.div`

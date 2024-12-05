@@ -3,6 +3,8 @@ import { getCandidates, getJobsApplied } from "../../service/requisitions";
 import { ICandidate, IJob } from "../../interface/collaborator.interface";
 import { supabase } from "../../config/supabase";
 import { verifyIfIsLogged } from "../../service/utils";
+import { NotificationType } from "../../components/notfication/types";
+import { classNotification, notification } from "./type";
 import useVerifyAccess from "../../hooks/useVerifyAccess";
 
 export default function useResumes() {
@@ -11,6 +13,11 @@ export default function useResumes() {
     const [listJobsApplied, setListJobsApplied] = useState<IJob[]>([]);
     const [buttonDisabled, setButtonDisabled] = useState(false);
     const [idCandidate, setIdCandidate] = useState("");
+
+    const [classNotification, setClassNotification] = useState<classNotification>("close");
+    const [typeNotification, setTypeNotification] = useState<NotificationType>("warning");
+    const [headerNotification, setHeaderNotification] = useState("");
+    const [describeNotification, setDescribeNotification] = useState("");
 
     const userAccess = useVerifyAccess();
 
@@ -78,11 +85,13 @@ export default function useResumes() {
             }, 3000);
 
             if(data) {
-                return alert("candidato aprovado!")
+                showNotification("success");
+                return;
             }
 
             if(error) {
-                return alert("erro ao aprovar o candidato!")
+                console.error("erro ao aprovar candidato");
+                return;
             }
         } catch (error) {
             console.error(error)
@@ -102,10 +111,12 @@ export default function useResumes() {
             }, 3000)
 
             if(data) {
+                showNotification("success");
                 return;
             }
 
             if(error) {
+                console.error("erro ao reprovar candidato")
                 return;
             }
 
@@ -114,9 +125,33 @@ export default function useResumes() {
         }
     }
 
+    function showNotification(type: notification) {
+        setClassNotification("open");
+    
+        setTimeout(() => {
+            setClassNotification("close");
+        }, 3500);
+    
+        if(type === "warning") {
+            setTypeNotification("warning");
+            setHeaderNotification("Aviso!");
+            setDescribeNotification("Candidato foi reprovado!")
+        } else {
+            setTypeNotification("success");
+            setHeaderNotification("Sucesso!");
+            setDescribeNotification("Candidato foi aprovado!");
+        }
+    }
+
     return {
         listCandidates,
         listJobsApplied,
+        notification: {
+            class: classNotification,
+            type: typeNotification,
+            header: headerNotification,
+            describe: describeNotification
+        },
         modal: {
             buttonsDisabled: buttonDisabled,
             visibility: visibilityModal,
