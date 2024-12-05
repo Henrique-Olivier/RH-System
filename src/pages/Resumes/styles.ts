@@ -45,12 +45,12 @@ export const BodyContainer = styled.div`
     }
 
     .alert.close{
-        bottom: 100%;
+        bottom: 250%;
         z-index: 5;
     }
 
     .alert.open{
-        bottom: 80%;
+        bottom: 120%;
     }
 `;
 

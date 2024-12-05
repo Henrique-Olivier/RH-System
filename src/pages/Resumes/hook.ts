@@ -86,7 +86,6 @@ export default function useResumes() {
 
             if(data) {
                 showNotification("success");
-                return;
             }
 
             if(error) {
@@ -111,8 +110,7 @@ export default function useResumes() {
             }, 3000)
 
             if(data) {
-                showNotification("success");
-                return;
+                showNotification("warning");
             }
 
             if(error) {
@@ -126,6 +124,7 @@ export default function useResumes() {
     }
 
     function showNotification(type: notification) {
+        console.log()
         setClassNotification("open");
     
         setTimeout(() => {
