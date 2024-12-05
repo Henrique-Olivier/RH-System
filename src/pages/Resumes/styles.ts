@@ -37,6 +37,7 @@ export const BodyContainer = styled.div`
         transition: bottom .5s;
         position: absolute;
         margin: 15px 0;
+        z-index: 999;
     }
 
     .alert.close{
