@@ -2,7 +2,6 @@ import { supabase } from "../config/supabase";
 import {
   CollaboratorType,
   ICandidate,
-  IJob,
   IUser,
   Permission,
   PositionType,
@@ -120,31 +119,6 @@ export async function getCandidates() {
   }
 }
 
-/* async function getTitleJobs(idsJobs: number[]) {
-  const jobs = await Promise.all(idsJobs.map(async (idVaga) => {
-    const { data, error } = await supabase.from("vagaAplicada").select("Vaga!inner(id, titulo)").eq("Vaga.id", idVaga);
-    if(data) {
-      data.forEach(item => {
-        const jobs: IJob[] = item.Vaga.map(value => {
-          return {
-            id: value.id,
-            titulo: value.titulo
-          }
-        })
-        return jobs;
-      })
-      return [];
-    }
-
-    if(error) {
-      console.error("Erro ao buscar titulos da vagas aplicadas:", error);
-      return []
-    }
-
-    return [];
-  }))
-} */
-
 async function getTitleJobs(idsJobs: number[]) {
 // Usar `Promise.all` para aguardar todas as promessas dentro do `map`
   const jobs = await Promise.all(idsJobs.map(async (idVaga) => {
@@ -154,10 +128,7 @@ async function getTitleJobs(idsJobs: number[]) {
 
       if (data) {
         // Retornar os jobs mapeados a partir dos dados
-        const res = data.map(item => (
-          item.Vaga
-        ));
-        console.log(res)
+        return data.map(item => item.Vaga);
       }
 
       if (error) {
@@ -167,7 +138,7 @@ async function getTitleJobs(idsJobs: number[]) {
 
       return []; // Retornar um array vazio se não houver dados
   }));
-  /* return jobs; */
+  return jobs.flat();
 }
 
 export async function getJobsApplied(idCandidate: string){
@@ -180,7 +151,8 @@ export async function getJobsApplied(idCandidate: string){
         item.vagaAplicada.map(vaga => idsVagas.push(vaga.fkVaga));
       });
 
-      const res = getTitleJobs(idsVagas);
+      const res = await getTitleJobs(idsVagas);
+      return res.flatMap(vaga => vaga);
     }
     
     if (error) {

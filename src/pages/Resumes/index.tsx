@@ -5,7 +5,23 @@ import useResumes from "./hook";
 import { BodyContainer, ListingContainer } from "./styles";
 
 export default function Resumes() {
-    const { listCandidates, modal } = useResumes();
+    const { listCandidates, listJobsApplied, modal } = useResumes();
+
+    function showJobsApplied() {
+        if(listJobsApplied) {
+            return listJobsApplied.map(jobs => {
+                return(
+                    <tr key={`${jobs.id}`}>
+                        <td><Typography variant="body-XS">{`${jobs.titulo}`}</Typography></td>
+                        <td className="action-btn">
+                            <Button size="medium" variant="main">Aprovar</Button>
+                            <Button size="medium" variant="secondary">Reprovar</Button>
+                        </td>
+                    </tr>
+                )
+            })
+        }
+    }
     
     function showCandidates() {
         if(listCandidates) {
@@ -34,13 +50,14 @@ export default function Resumes() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            {/* <tr>
                                 <td><Typography variant="body-XS">Front-end</Typography></td>
                                 <td className="action-btn">
                                     <Button size="medium" variant="main">Aprovar</Button>
                                     <Button size="medium" variant="secondary">Reprovar</Button>
                                 </td>
-                            </tr>
+                            </tr> */}
+                            {showJobsApplied()}
                         </tbody>
                     </table>
                 </div>
