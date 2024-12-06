@@ -38,3 +38,13 @@ export interface IUser {
   name: string | undefined;
 }
 
+export interface ICandidate {
+  id: number;
+  name: string | undefined;
+  email: string | undefined;
+}
+
+export interface IJob {
+  id: number;
+  titulo: string;
+}

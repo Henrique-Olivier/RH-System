@@ -5,6 +5,7 @@ import dashIcon from '../assets/dashIcon.png'
 import colabIcon from '../assets/collab.png'
 import careerIcon from '../assets/gravata.png'
 import userIcon from '../assets/informacao-pessoal.png'
+import curriculum from '../assets/cv.png';
 import vacancieIcon from '../assets/vaga.png'
 import Typography from "../Typography"
 import Button from "../Button"
@@ -45,9 +46,11 @@ export default function Sidebar() {
     function gotoCareerPage () {
         navigate('/carrer')
     }
+
     function gotoDashboardPage () {
         navigate('/dashboard')
     }
+
     function gotoUserPage() {
         navigate('/users')
     }
@@ -55,7 +58,9 @@ export default function Sidebar() {
         navigate('/vancaciemanagment')
     }
 
-
+    function gotoResumePage() {
+        navigate('/resumes')
+    }
 
 
     return (
@@ -72,6 +77,9 @@ export default function Sidebar() {
                     <Conditional condition={isAdmin!}>
                         <Button variant="text" size="large" icon={userIcon} onClick={gotoUserPage}><Typography variant="body-M-regular">Usuários</Typography></Button>
                         <Button variant="text" size="large" icon={vacancieIcon} onClick={goToVacanciePage}><Typography variant="body-M-regular">Vagas</Typography></Button>
+                    </Conditional>
+                    <Conditional condition={isAdmin!}>
+                        <Button variant='text' size='large' icon={curriculum} onClick={gotoResumePage}><Typography variant='body-M-regular'>Candidatos</Typography></Button>
                     </Conditional>
                     <Button variant="text" size="large"  onClick={loggout}><Typography variant="body-M-regular">Logout</Typography></Button>
                 </SidebarContent>
