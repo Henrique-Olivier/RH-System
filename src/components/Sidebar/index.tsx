@@ -6,6 +6,7 @@ import colabIcon from '../assets/collab.png'
 import careerIcon from '../assets/gravata.png'
 import userIcon from '../assets/informacao-pessoal.png'
 import curriculum from '../assets/cv.png';
+import vacancieIcon from '../assets/vaga.png'
 import Typography from "../Typography"
 import Button from "../Button"
 import { useNavigate } from "react-router-dom"
@@ -53,6 +54,9 @@ export default function Sidebar() {
     function gotoUserPage() {
         navigate('/users')
     }
+    function goToVacanciePage() {
+        navigate('/vancaciemanagment')
+    }
 
     function gotoResumePage() {
         navigate('/resumes')
@@ -72,6 +76,7 @@ export default function Sidebar() {
                     <Button variant="text" size="large" icon={careerIcon} onClick={gotoCareerPage}><Typography variant="body-M-regular">Cargos</Typography></Button>
                     <Conditional condition={isAdmin!}>
                         <Button variant="text" size="large" icon={userIcon} onClick={gotoUserPage}><Typography variant="body-M-regular">Usuários</Typography></Button>
+                        <Button variant="text" size="large" icon={vacancieIcon} onClick={goToVacanciePage}><Typography variant="body-M-regular">Vagas</Typography></Button>
                     </Conditional>
                     <Conditional condition={isAdmin!}>
                         <Button variant='text' size='large' icon={curriculum} onClick={gotoResumePage}><Typography variant='body-M-regular'>Candidatos</Typography></Button>

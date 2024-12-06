@@ -10,6 +10,9 @@ import Reset from "./pages/Reset";
 import Users from "./pages/Users";
 import CompleteRegister from "./pages/CompleteRegister";
 import Resumes from "./pages/Resumes";
+import Vacancies from "./pages/Vacancies";
+import JobVacancies from "./pages/JobVacancies";
+
 
 
 function App() {
@@ -25,6 +28,8 @@ function App() {
       <Route path="/users" element={<Users />}></Route>
       <Route path="/completeregister" element={<CompleteRegister />}></Route>
       <Route path="/resumes" element={<Resumes />}></Route>
+      <Route path="/vacancies" element={<Vacancies />}></Route>
+      <Route path="/vancaciemanagment" element={< JobVacancies/>}></Route>
     </Routes>
   );
 }
