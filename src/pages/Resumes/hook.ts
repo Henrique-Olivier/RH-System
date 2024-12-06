@@ -72,7 +72,7 @@ export default function useResumes() {
         try {
             await supabase.from("Colaborador").insert({ nome: nameCandidate!.name! })
             await supabase.from("vagaAplicada").delete().eq("fkCandidato", idCandidate);
-            const { data, error } = await supabase.from("Candidato").delete().eq("id", idCandidate);
+            const { error } = await supabase.from("Candidato").delete().eq("id", idCandidate);
 
             const res = await getCandidates();
             if(res) {
@@ -84,14 +84,12 @@ export default function useResumes() {
                 setButtonDisabled(false);
             }, 3000);
 
-            if(data) {
-                showNotification("success");
-            }
-
             if(error) {
                 console.error("erro ao aprovar candidato");
                 return;
             }
+
+            showNotification("success");
         } catch (error) {
             console.error(error)
         }
@@ -102,21 +100,19 @@ export default function useResumes() {
         setButtonDisabled(!buttonDisabled);
 
         try {
-            const { data, error } = await supabase.from("vagaAplicada").delete().eq("fkVaga", idJob).eq("fkCandidato", idCandidate);
+            const { error } = await supabase.from("vagaAplicada").delete().eq("fkVaga", idJob).eq("fkCandidato", idCandidate);
             
             setTimeout(() => {
                 setVisibilityModal(!visibilityModal);
                 setButtonDisabled(!buttonDisabled);
             }, 3000)
 
-            if(data) {
-                showNotification("warning");
-            }
-
             if(error) {
                 console.error("erro ao reprovar candidato")
                 return;
             }
+
+            showNotification("warning");
 
         } catch (error) {
             console.error(error)
@@ -124,7 +120,6 @@ export default function useResumes() {
     }
 
     function showNotification(type: notification) {
-        console.log()
         setClassNotification("open");
     
         setTimeout(() => {
